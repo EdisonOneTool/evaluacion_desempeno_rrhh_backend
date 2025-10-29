@@ -32,7 +32,7 @@ public class Evaluado {
     private String legajo;
 
     @Column(name = "resultado_final")
-    private float resultadoFinal;
+    private double resultadoFinal;
 
     @Column(name = "username")
     private String username;
@@ -51,4 +51,10 @@ public class Evaluado {
     @Builder.Default
     private List<EvaluacionCualitativa> evaluacionesCualitativas = new ArrayList<>();
 
+
+
+    public double getResultadoCuantitativas(List<EvaluacionCualitativa> evaluacionesCualitativas) {
+
+        return 0;
+    }
 }

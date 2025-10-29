@@ -38,6 +38,12 @@ public class EvaluacionCuantitativa {
     @JoinColumn(name = "evaluado_id")
     @ToString.Exclude
     private Evaluado evaluado;
-    
+
+
+
+    public double  getResultadoCompeticiones(List<Competencia> competencias) {
+        return (competencias.stream().mapToDouble(Competencia::getCalificacion).sum() / competencias.size());  // retornamos el promedio subtotal de todas las calificaciones para esas cuntitativas
+
+    }
 
 }

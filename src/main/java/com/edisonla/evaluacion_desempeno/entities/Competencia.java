@@ -22,7 +22,7 @@ public class Competencia {
     private String descripcion;
 
     @Column(name = "calificacion")
-    private float calificacion;
+    private double calificacion;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "evaluacion_cuantitativa_id")
@@ -32,5 +32,8 @@ public class Competencia {
 
 
 
+    public double  getCalificacion(){
+        return this.calificacion;
+    }
 
 }
