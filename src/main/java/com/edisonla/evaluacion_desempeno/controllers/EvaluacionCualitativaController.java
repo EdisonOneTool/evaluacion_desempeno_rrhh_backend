@@ -23,13 +23,13 @@ public class EvaluacionCualitativaController {
     EvaluacionCualitativaMapper evaluacionCualitativaMapper;
 
     @GetMapping
-    public Iterable<EvaluacionCualitativaDto> getAllEvalCual() {
-        return evaluacionCualitativaService.getAllEvalCual();
+    public Iterable<EvaluacionCualitativaDto> getAll() {
+        return evaluacionCualitativaService.getAll();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<EvaluacionCualitativaDto> getEvalCual(@PathVariable(name = "id") Long id) {
-        EvaluacionCualitativa evaluacionCualitativa =  evaluacionCualitativaService.getEvalCual(id);
+    public ResponseEntity<EvaluacionCualitativaDto> get(@PathVariable(name = "id") Long id) {
+        EvaluacionCualitativa evaluacionCualitativa =  evaluacionCualitativaService.get(id);
         if (evaluacionCualitativa == null) {
             return ResponseEntity.notFound().build();
         } else {

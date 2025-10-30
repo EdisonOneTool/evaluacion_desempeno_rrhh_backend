@@ -16,14 +16,14 @@ public class CompetenciaService {
     @Autowired
     private CompetenciaMapper competenciaMapper;
 
-    public Iterable<CompetenciaDto> getAllCompetencias() {
+    public Iterable<CompetenciaDto> getAll() {
         return competenciaRepository.findAll()
                 .stream()
                 .map(competenciaMapper::toDto)
                 .toList();
     }
 
-    public Competencia getCompetencia(Long id) {
+    public Competencia get(Long id) {
         return competenciaRepository.findById(id).orElse(null);
     }
 }

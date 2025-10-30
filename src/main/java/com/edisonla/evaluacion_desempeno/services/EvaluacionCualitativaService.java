@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Service
-@Transactional
 public class EvaluacionCualitativaService {
 
     @Autowired
@@ -21,14 +20,14 @@ public class EvaluacionCualitativaService {
     @Autowired
     private EvaluacionCualitativaMapper evaluacionCualitativaMapper;
 
-    public Iterable<EvaluacionCualitativaDto> getAllEvalCual() {
+    public Iterable<EvaluacionCualitativaDto> getAll() {
         return evaluacionCualitativaRepository.findAll()
                 .stream()
                 .map(evaluacionCualitativaMapper::toDto) //method reference reemplazo de (evaluacionCualitativa -> evaluacionCualitativaMapper.toDto(evaluacionCualitativa))
                 .toList();
     }
 
-    public EvaluacionCualitativa getEvalCual(Long id) {
+    public EvaluacionCualitativa get(Long id) {
         return evaluacionCualitativaRepository.findById(id).orElse(null);
     }
 

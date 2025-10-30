@@ -1,0 +1,10 @@
+package com.edisonla.evaluacion_desempeno.mappers;
+
+import com.edisonla.evaluacion_desempeno.dtos.EvaluadoDto;
+import com.edisonla.evaluacion_desempeno.entities.Evaluado;
+import org.mapstruct.Mapper;
+
+@Mapper(componentModel = "spring")
+public interface EvaluadoMapper {
+    EvaluadoDto toDto(Evaluado evaluado);
+}

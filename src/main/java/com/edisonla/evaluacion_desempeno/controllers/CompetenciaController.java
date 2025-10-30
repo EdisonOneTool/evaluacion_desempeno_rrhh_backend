@@ -24,13 +24,13 @@ public class CompetenciaController {
     private CompetenciaMapper competenciaMapper;
 
     @GetMapping
-    public Iterable<CompetenciaDto> getAllCompetencias() {
-        return competenciaService.getAllCompetencias();
+    public Iterable<CompetenciaDto> getAll() {
+        return competenciaService.getAll();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CompetenciaDto> getCompetenciaById(@PathVariable long id) {
-        Competencia competencia = competenciaService.getCompetencia(id);
+    public ResponseEntity<CompetenciaDto> get(@PathVariable long id) {
+        Competencia competencia = competenciaService.get(id);
         if (competencia == null) {
             return ResponseEntity.notFound().build();
         } else {
