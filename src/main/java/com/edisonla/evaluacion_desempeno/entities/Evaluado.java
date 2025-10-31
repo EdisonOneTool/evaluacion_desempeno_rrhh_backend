@@ -29,13 +29,16 @@ public class Evaluado {
     private LocalDateTime incorporacion;
 
     @Column(name = "legajo")
-    private String legajo;
+    private int legajo;
 
     @Column(name = "resultado_final")
     private double resultadoFinal;
 
     @Column(name = "username")
     private String username;
+
+    @Column(name = "mail")
+    private String mail;
 
     @Column(name = "password")
     private String password;

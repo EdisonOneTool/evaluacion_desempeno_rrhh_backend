@@ -11,6 +11,6 @@ public interface EvaluadoRepository extends JpaRepository<Evaluado, Long> {
     Evaluado findByLegajo(int legajo);
     Evaluado findByNombre(String nombre);
     Evaluado findByApellido(String apellido);
-    Evaluado findByEmail(String email);
+    Evaluado findByMail(String mail);
     Evaluado findByUsername(String username);
 }
