@@ -8,8 +8,8 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "competencia")
-public class Competencia {
+@Table(name = "comportamiento")
+public class Comportamiento {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -25,9 +25,9 @@ public class Competencia {
     private double calificacion;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "evaluacion_cuantitativa_id")
+    @JoinColumn(name = "competencia_cuantitativa_id")
     @ToString.Exclude
-    private EvaluacionCuantitativa evaluacionCuantitativa;
+    private CompetenciaCuantitativa competenciaCuantitativa;
 
 
 }

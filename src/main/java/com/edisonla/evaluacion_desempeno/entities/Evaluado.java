@@ -48,10 +48,10 @@ public class Evaluado {
 
     @OneToMany(mappedBy = "evaluador", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
     @Builder.Default
-    private List<EvaluacionCuantitativa> evaluacionesCuantitativas = new ArrayList<>();
+    private List<CompetenciaCuantitativa> competenciasCuantitativas = new ArrayList<>();
 
     @OneToMany(mappedBy = "evaluador", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
     @Builder.Default
-    private List<EvaluacionCualitativa> evaluacionesCualitativas = new ArrayList<>();
+    private List<CompetenciaCualitativa> competenciasCualitativas = new ArrayList<>();
     
 }

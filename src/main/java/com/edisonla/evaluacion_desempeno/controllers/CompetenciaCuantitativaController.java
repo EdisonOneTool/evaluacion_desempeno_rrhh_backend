@@ -14,9 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/api/evaluados")
-public class EvaluadoController {
-
+@RequestMapping("/api/competencia/cuantitativa")
+public class CompetenciaCuantitativaController {
     @Autowired
     CompetenciaCuantitativaService competenciaCuantitativaService;
 
