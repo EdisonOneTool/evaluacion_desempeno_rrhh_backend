@@ -6,24 +6,50 @@ import com.edisonla.evaluacion_desempeno.mappers.EvaluadoMapper;
 import com.edisonla.evaluacion_desempeno.repositories.EvaluadoRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
 @AllArgsConstructor
 public class EvaluadoService {
 
-    private final EvaluadoRepository evaluadoRepository;
+    private final EvaluadoRepository repository;
 
-    private final EvaluadoMapper evaluadoMapper;
+    private final EvaluadoMapper mapper;
 
     public Iterable<EvaluadoDto> getAll() {
-        return evaluadoRepository.findAll()
+        return repository.findAll()
                 .stream()
-                .map(evaluadoMapper::toDto) //method reference reemplazo de (evaluacionCualitativa -> evaluacionCualitativaMapper.toDto(evaluacionCualitativa))
+                .map(mapper::toDto) //method reference reemplazo de (evaluacionCualitativa -> evaluacionCualitativaMapper.toDto(evaluacionCualitativa))
                 .toList();
     }
 
-    public Evaluado get(Long id) {
-        return evaluadoRepository.findById(id).orElse(null);
+    public EvaluadoDto get(Long id) {
+        Evaluado e = repository.findById(id).orElse(null);
+        return mapper.toDto(e);
+    }
+
+    public EvaluadoDto create(EvaluadoDto dto) {
+        return mapper.toDto(repository.save(mapper.toEntity(dto)));
+    }
+
+    public EvaluadoDto update(Long id, EvaluadoDto dto) {
+        Evaluado evaluado = repository.findById(id).orElse(null);
+        if(evaluado == null) {
+            return null;
+        } else {
+            repository.save(evaluado);
+            return mapper.toDto(evaluado);
+        }
+    }
+
+    public EvaluadoDto delete(Long id) {
+        Evaluado evaluado = repository.findById(id).orElse(null);
+        if (evaluado == null) {
+            return null;
+        } else {
+            repository.delete(evaluado);
+            return mapper.toDto(evaluado);
+        }
     }
 }
