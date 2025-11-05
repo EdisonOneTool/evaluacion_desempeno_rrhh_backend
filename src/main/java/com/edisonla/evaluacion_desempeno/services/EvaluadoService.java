@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @AllArgsConstructor
 public class EvaluadoService {
@@ -18,7 +20,8 @@ public class EvaluadoService {
     private final EvaluadoMapper mapper;
 
     public Iterable<EvaluadoDto> getAll() {
-        return repository.findAll()
+        List<Evaluado> e = repository.findAll();
+        return e
                 .stream()
                 .map(mapper::toDto) //method reference reemplazo de (evaluacionCualitativa -> evaluacionCualitativaMapper.toDto(evaluacionCualitativa))
                 .toList();
