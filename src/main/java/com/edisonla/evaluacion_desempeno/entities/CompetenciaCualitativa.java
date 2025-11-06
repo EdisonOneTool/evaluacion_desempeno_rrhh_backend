@@ -3,7 +3,8 @@ package com.edisonla.evaluacion_desempeno.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder

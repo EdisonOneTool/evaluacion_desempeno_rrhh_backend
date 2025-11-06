@@ -5,8 +5,6 @@ import com.edisonla.evaluacion_desempeno.entities.Evaluado;
 import com.edisonla.evaluacion_desempeno.mappers.EvaluadoMapper;
 import com.edisonla.evaluacion_desempeno.repositories.EvaluadoRepository;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,23 +15,24 @@ public class EvaluadoService {
 
     private final EvaluadoRepository repository;
 
-    private final EvaluadoMapper mapper;
+    // private final EvaluadoMapper mapper;
 
     public Iterable<EvaluadoDto> getAll() {
         List<Evaluado> e = repository.findAll();
         return e
                 .stream()
-                .map(mapper::toDto) //method reference reemplazo de (evaluacionCualitativa -> evaluacionCualitativaMapper.toDto(evaluacionCualitativa))
+                .map(EvaluadoMapper::toDto) //method reference reemplazo de (e -> mapper.toDto(e))
                 .toList();
     }
 
     public EvaluadoDto get(Long id) {
         Evaluado e = repository.findById(id).orElse(null);
-        return mapper.toDto(e);
+        if (e == null) { return null; }
+        return EvaluadoMapper.toDto(e);
     }
 
     public EvaluadoDto create(EvaluadoDto dto) {
-        return mapper.toDto(repository.save(mapper.toEntity(dto)));
+        return EvaluadoMapper.toDto(repository.save(EvaluadoMapper.toEntity(dto)));
     }
 
     public EvaluadoDto update(Long id, EvaluadoDto dto) {
@@ -42,7 +41,7 @@ public class EvaluadoService {
             return null;
         } else {
             repository.save(evaluado);
-            return mapper.toDto(evaluado);
+            return EvaluadoMapper.toDto(evaluado);
         }
     }
 
@@ -52,7 +51,7 @@ public class EvaluadoService {
             return null;
         } else {
             repository.delete(evaluado);
-            return mapper.toDto(evaluado);
+            return EvaluadoMapper.toDto(evaluado);
         }
     }
 }

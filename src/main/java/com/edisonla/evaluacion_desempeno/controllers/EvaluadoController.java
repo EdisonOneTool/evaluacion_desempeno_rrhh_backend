@@ -1,8 +1,6 @@
 package com.edisonla.evaluacion_desempeno.controllers;
 
 import com.edisonla.evaluacion_desempeno.dtos.EvaluadoDto;
-import com.edisonla.evaluacion_desempeno.entities.Evaluado;
-import com.edisonla.evaluacion_desempeno.mappers.EvaluadoMapper;
 import com.edisonla.evaluacion_desempeno.services.EvaluadoService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;

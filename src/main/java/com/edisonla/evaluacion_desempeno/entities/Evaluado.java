@@ -7,7 +7,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -53,5 +54,22 @@ public class Evaluado {
     @OneToMany(mappedBy = "evaluador", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
     @Builder.Default
     private List<CompetenciaCualitativa> competenciasCualitativas = new ArrayList<>();
-    
+
+    public Evaluado(String nombre, String apellido, LocalDateTime incorporacion, int legajo, String username) {
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.incorporacion = incorporacion;
+        this.legajo = legajo;
+        this.username = username;
+    }
+
+    public Evaluado(String nombre, String apellido, LocalDateTime incorporacion, int legajo, double v, String username, boolean b) {
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.incorporacion = incorporacion;
+        this.legajo = legajo;
+        this.resultadoFinal = v;
+        this.username = username;
+        this.esAdmin = b;
+    }
 }
