@@ -1,7 +1,6 @@
 package com.edisonla.evaluacion_desempeno.controllers;
 
 import com.edisonla.evaluacion_desempeno.dtos.ComportamientoDto;
-import com.edisonla.evaluacion_desempeno.dtos.EvaluadoDto;
 import com.edisonla.evaluacion_desempeno.entities.Comportamiento;
 import com.edisonla.evaluacion_desempeno.mappers.ComportamientoMapper;
 import com.edisonla.evaluacion_desempeno.services.ComportamientoService;
@@ -21,10 +20,7 @@ public class ComportamientoController {
     @Autowired
     private ComportamientoService service;
 
-    @Autowired
-    private ComportamientoMapper mapper;
-
-    private static final String urlBase = "/api/evaluados";
+    private static final String urlBase = "/api/comportamiento";
 
     @GetMapping
     public Iterable<ComportamientoDto> getAll() {
@@ -37,7 +33,7 @@ public class ComportamientoController {
         if (comportamiento == null) {
             return ResponseEntity.notFound().build();
         } else {
-            return ResponseEntity.ok(mapper.toDto(comportamiento));
+            return ResponseEntity.ok(ComportamientoMapper.toDto(comportamiento));
         }
     }
 

@@ -5,6 +5,7 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Getter
@@ -27,7 +28,7 @@ public class Evaluado {
     private String apellido;
 
     @Column(name = "incorporacion")
-    private LocalDateTime incorporacion;
+    private Date incorporacion;
 
     @Column(name = "legajo")
     private int legajo;
@@ -55,15 +56,18 @@ public class Evaluado {
     @Builder.Default
     private List<CompetenciaCualitativa> competenciasCualitativas = new ArrayList<>();
 
-    public Evaluado(String nombre, String apellido, LocalDateTime incorporacion, int legajo, String username) {
+    public Evaluado(String nombre, String apellido, Date incorporacion, int legajo, double resultadoFinal, String username) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.incorporacion = incorporacion;
         this.legajo = legajo;
+        this.resultadoFinal = resultadoFinal;
         this.username = username;
+        this.esAdmin = false;
     }
 
-    public Evaluado(String nombre, String apellido, LocalDateTime incorporacion, int legajo, double v, String username, boolean b) {
+    public Evaluado(Long id, String nombre, String apellido, Date incorporacion, int legajo, double v, String username, boolean b) {
+        this.id = id;
         this.nombre = nombre;
         this.apellido = apellido;
         this.incorporacion = incorporacion;

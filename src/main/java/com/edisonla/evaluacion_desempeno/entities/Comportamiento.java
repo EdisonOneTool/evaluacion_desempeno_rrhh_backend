@@ -31,4 +31,15 @@ public class Comportamiento {
     private CompetenciaCuantitativa competenciaCuantitativa;
 
 
+    public Comportamiento(String nombre, String descripcion, double calificacion) {
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.calificacion = calificacion;
+    }
+    public Comportamiento(Long id, String nombre, String descripcion, double calificacion) {
+        this.id = id;
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.calificacion = calificacion;
+    }
 }

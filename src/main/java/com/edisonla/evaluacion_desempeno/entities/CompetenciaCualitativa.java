@@ -34,4 +34,18 @@ public class CompetenciaCualitativa {
     private Evaluado evaluador;
 
 
+    public CompetenciaCualitativa(Long id, String nombre, String descripcion, String devolucion, boolean validado) {
+        this.id = id;
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.devolucion = devolucion;
+        this.validado = validado;
+    }
+
+    public CompetenciaCualitativa(String nombre, String descripcion, String devolucion, boolean validado) {
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.devolucion = devolucion;
+        this.validado = validado;
+    }
 }

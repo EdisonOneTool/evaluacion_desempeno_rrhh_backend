@@ -1,6 +1,7 @@
 package com.edisonla.evaluacion_desempeno.controllers;
 
 import com.edisonla.evaluacion_desempeno.dtos.EvaluadoDto;
+import com.edisonla.evaluacion_desempeno.dtos.EvaluadoRequest;
 import com.edisonla.evaluacion_desempeno.services.EvaluadoService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +37,7 @@ public class EvaluadoController {
     }
 
     @PostMapping
-    public ResponseEntity<EvaluadoDto> create(@RequestBody EvaluadoDto request,
+    public ResponseEntity<EvaluadoDto> create(@RequestBody EvaluadoRequest request,
                                               UriComponentsBuilder uriBuilder) {
         EvaluadoDto dto = service.create(request);
         URI location = uriBuilder.path(urlBase + "/{id}").buildAndExpand(dto.id()).toUri();
@@ -45,8 +46,8 @@ public class EvaluadoController {
     }
 
     @PutMapping ("/{id}")
-    public ResponseEntity<EvaluadoDto> update(@PathVariable Long id, @RequestBody EvaluadoDto request) {
-        EvaluadoDto dto = service.update(id, request);
+    public ResponseEntity<EvaluadoRequest> update(@PathVariable Long id, @RequestBody EvaluadoRequest request) {
+        EvaluadoRequest dto = service.update(id, request);
         if(dto == null) {
             return ResponseEntity.notFound().build();
         } else {
@@ -56,11 +57,11 @@ public class EvaluadoController {
 
     @DeleteMapping ("{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
-        EvaluadoDto dto = service.delete(id);
-        if (dto == null) {
-            return ResponseEntity.notFound().build();
-        } else {
+        boolean isDeleted = service.delete(id);
+        if (isDeleted) {
             return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.notFound().build();
         }
     }
 }

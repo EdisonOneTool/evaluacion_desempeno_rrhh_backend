@@ -1,6 +1,6 @@
 package com.edisonla.evaluacion_desempeno.dtos;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
-public record EvaluadoDto(Long id, String nombre, String apellido, LocalDateTime incorporacion, int legajo, double resultadoFinal, String username, boolean esAdmin) {
+public record EvaluadoDto(Long id, String nombre, String apellido, Date incorporacion, int legajo, double resultadoFinal, String username, boolean esAdmin) {
 }

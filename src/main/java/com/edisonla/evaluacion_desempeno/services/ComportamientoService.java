@@ -1,13 +1,11 @@
 package com.edisonla.evaluacion_desempeno.services;
 
 import com.edisonla.evaluacion_desempeno.dtos.ComportamientoDto;
-import com.edisonla.evaluacion_desempeno.dtos.EvaluadoDto;
 import com.edisonla.evaluacion_desempeno.entities.Comportamiento;
-import com.edisonla.evaluacion_desempeno.entities.Evaluado;
 import com.edisonla.evaluacion_desempeno.mappers.ComportamientoMapper;
+import com.edisonla.evaluacion_desempeno.mappers.EvaluadoMapper;
 import com.edisonla.evaluacion_desempeno.repositories.ComportamientoRepository;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -16,12 +14,10 @@ public class ComportamientoService {
 
     private final ComportamientoRepository repository;
 
-    private final ComportamientoMapper mapper;
-
     public Iterable<ComportamientoDto> getAll() {
         return repository.findAll()
                 .stream()
-                .map(mapper::toDto)
+                .map(ComportamientoMapper::toDto)
                 .toList();
     }
 
@@ -30,7 +26,7 @@ public class ComportamientoService {
     }
 
     public ComportamientoDto create(ComportamientoDto dto) {
-        return mapper.toDto(repository.save(mapper.toEntity(dto)));
+        return ComportamientoMapper.toDto(repository.save(ComportamientoMapper.toEntity(dto)));
     }
 
     public ComportamientoDto update(Long id, ComportamientoDto dto) {
@@ -39,7 +35,7 @@ public class ComportamientoService {
             return null;
         } else {
             repository.save(comportamiento);
-            return mapper.toDto(comportamiento);
+            return ComportamientoMapper.toDto(comportamiento);
         }
     }
 
@@ -49,7 +45,7 @@ public class ComportamientoService {
             return null;
         } else {
             repository.delete(comportamiento);
-            return mapper.toDto(comportamiento);
+            return ComportamientoMapper.toDto(comportamiento);
         }
     }
 }

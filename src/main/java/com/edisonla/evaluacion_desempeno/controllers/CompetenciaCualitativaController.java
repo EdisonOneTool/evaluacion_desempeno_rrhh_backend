@@ -2,9 +2,7 @@ package com.edisonla.evaluacion_desempeno.controllers;
 
 
 import com.edisonla.evaluacion_desempeno.dtos.CompetenciaCualitativaDto;
-import com.edisonla.evaluacion_desempeno.dtos.CompetenciaCuantitativaDto;
 import com.edisonla.evaluacion_desempeno.entities.CompetenciaCualitativa;
-import com.edisonla.evaluacion_desempeno.mappers.CompetenciaCualitativaMapper;
 import com.edisonla.evaluacion_desempeno.services.CompetenciaCualitativaService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,9 +20,6 @@ public class CompetenciaCualitativaController {
 
     @Autowired
     CompetenciaCualitativaService service;
-
-    @Autowired
-    CompetenciaCualitativaMapper mapper;
 
     private static final String urlBase = "/api/competencia/cualitativa";
 

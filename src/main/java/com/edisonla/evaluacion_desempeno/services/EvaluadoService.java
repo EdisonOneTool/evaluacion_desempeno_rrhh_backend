@@ -1,8 +1,10 @@
 package com.edisonla.evaluacion_desempeno.services;
 
 import com.edisonla.evaluacion_desempeno.dtos.EvaluadoDto;
+import com.edisonla.evaluacion_desempeno.dtos.EvaluadoRequest;
 import com.edisonla.evaluacion_desempeno.entities.Evaluado;
 import com.edisonla.evaluacion_desempeno.mappers.EvaluadoMapper;
+import com.edisonla.evaluacion_desempeno.mappers.EvaluadoRequestMapper;
 import com.edisonla.evaluacion_desempeno.repositories.EvaluadoRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,8 +16,6 @@ import java.util.List;
 public class EvaluadoService {
 
     private final EvaluadoRepository repository;
-
-    // private final EvaluadoMapper mapper;
 
     public Iterable<EvaluadoDto> getAll() {
         List<Evaluado> e = repository.findAll();
@@ -31,27 +31,28 @@ public class EvaluadoService {
         return EvaluadoMapper.toDto(e);
     }
 
-    public EvaluadoDto create(EvaluadoDto dto) {
-        return EvaluadoMapper.toDto(repository.save(EvaluadoMapper.toEntity(dto)));
+    public EvaluadoDto create(EvaluadoRequest dto) {
+        repository.save(EvaluadoRequestMapper.toEntity(dto));
+        return EvaluadoMapper.toDto(repository.findByUsername(dto.username()));
     }
 
-    public EvaluadoDto update(Long id, EvaluadoDto dto) {
+    public EvaluadoRequest update(Long id, EvaluadoRequest dto) {
         Evaluado evaluado = repository.findById(id).orElse(null);
         if(evaluado == null) {
             return null;
         } else {
             repository.save(evaluado);
-            return EvaluadoMapper.toDto(evaluado);
+            return EvaluadoRequestMapper.toDto(evaluado);
         }
     }
 
-    public EvaluadoDto delete(Long id) {
+    public boolean delete(Long id) {
         Evaluado evaluado = repository.findById(id).orElse(null);
         if (evaluado == null) {
-            return null;
+            return false;
         } else {
             repository.delete(evaluado);
-            return EvaluadoMapper.toDto(evaluado);
+            return true;
         }
     }
 }

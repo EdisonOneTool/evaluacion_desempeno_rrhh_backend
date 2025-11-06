@@ -9,19 +9,19 @@ public class EvaluadoMapper {
     }
 
     public static Evaluado toEntity(final EvaluadoDto dto) {
-        return new Evaluado(dto.nombre(), dto.apellido(), dto.incorporacion(), dto.legajo(), dto.resultadoFinal(), dto.username(), dto.esAdmin());
+        return new Evaluado(dto.id(), dto.nombre(), dto.apellido(), dto.incorporacion(), dto.legajo(), dto.resultadoFinal(), dto.username(), dto.esAdmin());
     }
 
-    public static EvaluadoDto toDto(final Evaluado evlauado) {
+    public static EvaluadoDto toDto(final Evaluado entity) {
         return new EvaluadoDto(
-                evlauado.getId(),
-                evlauado.getNombre(),
-                evlauado.getApellido(),
-                evlauado.getIncorporacion(),
-                evlauado.getLegajo(),
-                evlauado.getResultadoFinal(),
-                evlauado.getUsername(),
-                evlauado.isEsAdmin()
+                entity.getId(),
+                entity.getNombre(),
+                entity.getApellido(),
+                entity.getIncorporacion(),
+                entity.getLegajo(),
+                entity.getResultadoFinal(),
+                entity.getUsername(),
+                entity.isEsAdmin()
         );
         //Long id, String nombre, String apellido, LocalDateTime incorporacion, int legajo, double resultadoFinal, String username, boolean esAdmin
     }

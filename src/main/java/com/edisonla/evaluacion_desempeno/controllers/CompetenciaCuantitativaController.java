@@ -1,9 +1,7 @@
 package com.edisonla.evaluacion_desempeno.controllers;
 
 import com.edisonla.evaluacion_desempeno.dtos.CompetenciaCuantitativaDto;
-import com.edisonla.evaluacion_desempeno.dtos.ComportamientoDto;
 import com.edisonla.evaluacion_desempeno.entities.CompetenciaCuantitativa;
-import com.edisonla.evaluacion_desempeno.mappers.CompetenciaCuantitativaMapper;
 import com.edisonla.evaluacion_desempeno.services.CompetenciaCuantitativaService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
