@@ -1,6 +1,7 @@
 package com.edisonla.evaluacion_desempeno.controllers;
 
 import com.edisonla.evaluacion_desempeno.dtos.ComportamientoDto;
+import com.edisonla.evaluacion_desempeno.dtos.ComportamientoRequest;
 import com.edisonla.evaluacion_desempeno.entities.Comportamiento;
 import com.edisonla.evaluacion_desempeno.mappers.ComportamientoMapper;
 import com.edisonla.evaluacion_desempeno.services.ComportamientoService;
@@ -38,10 +39,10 @@ public class ComportamientoController {
     }
 
     @PostMapping
-    public ResponseEntity<ComportamientoDto> create(@RequestBody ComportamientoDto request,
+    public ResponseEntity<ComportamientoRequest> create(@RequestBody ComportamientoRequest request,
                                               UriComponentsBuilder uriBuilder) {
-        ComportamientoDto dto = service.create(request);
-        URI location = uriBuilder.path(urlBase + "/{id}").buildAndExpand(dto.id()).toUri();
+        ComportamientoRequest dto = service.create(request);
+        URI location = uriBuilder.path(urlBase + "/{id}").buildAndExpand(123).toUri();
         return ResponseEntity.created(location).body(dto);
 
     }
@@ -56,7 +57,7 @@ public class ComportamientoController {
         }
     }
 
-    @DeleteMapping ("{id}")
+    @DeleteMapping ("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         ComportamientoDto dto = service.delete(id);
         if (dto == null) {

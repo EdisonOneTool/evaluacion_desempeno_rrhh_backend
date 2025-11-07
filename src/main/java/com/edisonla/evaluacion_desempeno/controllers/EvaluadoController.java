@@ -55,7 +55,7 @@ public class EvaluadoController {
         }
     }
 
-    @DeleteMapping ("{id}")
+    @DeleteMapping ("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         boolean isDeleted = service.delete(id);
         if (isDeleted) {

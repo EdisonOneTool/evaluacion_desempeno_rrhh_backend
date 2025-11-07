@@ -1,8 +1,10 @@
 package com.edisonla.evaluacion_desempeno.services;
 
 import com.edisonla.evaluacion_desempeno.dtos.ComportamientoDto;
+import com.edisonla.evaluacion_desempeno.dtos.ComportamientoRequest;
 import com.edisonla.evaluacion_desempeno.entities.Comportamiento;
 import com.edisonla.evaluacion_desempeno.mappers.ComportamientoMapper;
+import com.edisonla.evaluacion_desempeno.mappers.ComportamientoRequestMapper;
 import com.edisonla.evaluacion_desempeno.mappers.EvaluadoMapper;
 import com.edisonla.evaluacion_desempeno.repositories.ComportamientoRepository;
 import lombok.AllArgsConstructor;
@@ -25,8 +27,10 @@ public class ComportamientoService {
         return repository.findById(id).orElse(null);
     }
 
-    public ComportamientoDto create(ComportamientoDto dto) {
-        return ComportamientoMapper.toDto(repository.save(ComportamientoMapper.toEntity(dto)));
+    public ComportamientoRequest create(ComportamientoRequest dto) {
+        repository.save(ComportamientoRequestMapper.toEntity(dto));
+        //return ComportamientoRequestMapper.toDto(repository.findByNombre(dto.nombre()));
+        return null;
     }
 
     public ComportamientoDto update(Long id, ComportamientoDto dto) {

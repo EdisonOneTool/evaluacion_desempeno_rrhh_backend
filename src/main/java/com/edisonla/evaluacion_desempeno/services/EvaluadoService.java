@@ -32,8 +32,8 @@ public class EvaluadoService {
     }
 
     public EvaluadoDto create(EvaluadoRequest dto) {
-        repository.save(EvaluadoRequestMapper.toEntity(dto));
-        return EvaluadoMapper.toDto(repository.findByUsername(dto.username()));
+        Evaluado e = repository.save(EvaluadoRequestMapper.toEntity(dto));
+        return EvaluadoMapper.toDto(e);
     }
 
     public EvaluadoRequest update(Long id, EvaluadoRequest dto) {
@@ -41,8 +41,8 @@ public class EvaluadoService {
         if(evaluado == null) {
             return null;
         } else {
-            repository.save(evaluado);
-            return EvaluadoRequestMapper.toDto(evaluado);
+            Evaluado res = repository.save(evaluado);
+            return EvaluadoRequestMapper.toDto(res);
         }
     }
 

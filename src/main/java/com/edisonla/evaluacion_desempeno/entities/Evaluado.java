@@ -46,7 +46,7 @@ public class Evaluado {
     private String password;
 
     @Column(name = "es_admin")
-    private boolean esAdmin;
+    private boolean admin;
 
     @OneToMany(mappedBy = "evaluador", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
     @Builder.Default
@@ -56,17 +56,18 @@ public class Evaluado {
     @Builder.Default
     private List<CompetenciaCualitativa> competenciasCualitativas = new ArrayList<>();
 
-    public Evaluado(String nombre, String apellido, Date incorporacion, int legajo, double resultadoFinal, String username) {
+    public Evaluado(String nombre, String apellido, Date incorporacion, int legajo, double resultadoFinal, String username, String mail, String password) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.incorporacion = incorporacion;
         this.legajo = legajo;
         this.resultadoFinal = resultadoFinal;
         this.username = username;
-        this.esAdmin = false;
+        this.admin = false;
+        this.mail = mail;
     }
 
-    public Evaluado(Long id, String nombre, String apellido, Date incorporacion, int legajo, double v, String username, boolean b) {
+    public Evaluado(Long id, String nombre, String apellido, Date incorporacion, int legajo, double v, String username, String mail, String password, boolean b) {
         this.id = id;
         this.nombre = nombre;
         this.apellido = apellido;
@@ -74,6 +75,28 @@ public class Evaluado {
         this.legajo = legajo;
         this.resultadoFinal = v;
         this.username = username;
-        this.esAdmin = b;
+        this.password = password;
+        this.admin = b;
+        this.mail = mail;
+    }
+
+    public Evaluado(String nombre, String apellido, Date incorporacion, int legajo, double v, String username, String mail) {
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.incorporacion = incorporacion;
+        this.legajo = legajo;
+        this.resultadoFinal = v;
+        this.username = username;
+        this.mail = mail;
+    }
+
+    public void addCompetenciaCuantitativa(CompetenciaCuantitativa competencia) {
+        this.competenciasCuantitativas.add(competencia);
+        competencia.setEvaluador(this);
+    }
+
+    public void addCompetenciaCualitativa(CompetenciaCualitativa competencia) {
+        this.competenciasCualitativas.add(competencia);
+        competencia.setEvaluador(this);
     }
 }

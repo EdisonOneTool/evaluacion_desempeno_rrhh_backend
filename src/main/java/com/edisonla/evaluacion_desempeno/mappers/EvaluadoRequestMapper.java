@@ -9,7 +9,7 @@ public class EvaluadoRequestMapper {
     }
 
     public static Evaluado toEntity(final EvaluadoRequest dto) {
-        return new Evaluado(dto.nombre(), dto.apellido(), dto.incorporacion(), dto.legajo(), dto.resultadoFinal(), dto.username());
+        return new Evaluado(dto.nombre(), dto.apellido(), dto.incorporacion(), dto.legajo(), dto.resultadoFinal(), dto.username(), dto.mail());
     }
 
     public static EvaluadoRequest toDto(final Evaluado entity) {
@@ -19,8 +19,10 @@ public class EvaluadoRequestMapper {
                 entity.getIncorporacion(),
                 entity.getLegajo(),
                 entity.getResultadoFinal(),
-                entity.getUsername()
+                entity.getUsername(),
+                entity.getMail(),
+                entity.isAdmin()
         );
     }
-    //String nombre, String apellido, LocalDateTime incorporacion, int legajo, String username
+    //String nombre, String apellido, LocalDateTime incorporacion, int legajo, String username, String mail
 }

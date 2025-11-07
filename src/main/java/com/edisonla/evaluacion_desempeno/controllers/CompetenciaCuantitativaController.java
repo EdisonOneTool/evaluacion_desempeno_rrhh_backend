@@ -2,6 +2,7 @@ package com.edisonla.evaluacion_desempeno.controllers;
 
 import com.edisonla.evaluacion_desempeno.dtos.CompetenciaCuantitativaDto;
 import com.edisonla.evaluacion_desempeno.entities.CompetenciaCuantitativa;
+import com.edisonla.evaluacion_desempeno.mappers.CompetenciaCuantitativaMapper;
 import com.edisonla.evaluacion_desempeno.services.CompetenciaCuantitativaService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +19,6 @@ public class CompetenciaCuantitativaController {
     @Autowired
     CompetenciaCuantitativaService service;
 
-    @Autowired
-    CompetenciaCuantitativaMapper mapper;
 
     private static final String urlBase = "/api/competencia/cuantitativa";
 
@@ -34,7 +33,7 @@ public class CompetenciaCuantitativaController {
         if (competenciaCuantitativa == null) {
             return ResponseEntity.notFound().build();
         } else {
-            return ResponseEntity.ok(mapper.toDto(competenciaCuantitativa));
+            return ResponseEntity.ok(CompetenciaCuantitativaMapper.toDto(competenciaCuantitativa));
         }
     }
 
@@ -58,7 +57,7 @@ public class CompetenciaCuantitativaController {
         }
     }
 
-    @DeleteMapping ("{id}")
+    @DeleteMapping ("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         CompetenciaCuantitativaDto dto = service.delete(id);
         if (dto == null) {

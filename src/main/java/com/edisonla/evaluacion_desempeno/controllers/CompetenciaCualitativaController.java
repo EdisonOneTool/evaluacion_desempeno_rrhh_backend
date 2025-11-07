@@ -3,6 +3,7 @@ package com.edisonla.evaluacion_desempeno.controllers;
 
 import com.edisonla.evaluacion_desempeno.dtos.CompetenciaCualitativaDto;
 import com.edisonla.evaluacion_desempeno.entities.CompetenciaCualitativa;
+import com.edisonla.evaluacion_desempeno.mappers.CompetenciaCualitativaMapper;
 import com.edisonla.evaluacion_desempeno.services.CompetenciaCualitativaService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +35,7 @@ public class CompetenciaCualitativaController {
         if (competenciaCualitativa == null) {
             return ResponseEntity.notFound().build();
         } else {
-            return ResponseEntity.ok(mapper.toDto(competenciaCualitativa));
+            return ResponseEntity.ok(CompetenciaCualitativaMapper.toDto(competenciaCualitativa));
         }
     }
 
@@ -58,7 +59,7 @@ public class CompetenciaCualitativaController {
         }
     }
 
-    @DeleteMapping ("{id}")
+    @DeleteMapping ("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         CompetenciaCualitativaDto dto = service.delete(id);
         if (dto == null) {
