@@ -37,11 +37,11 @@ public class CompetenciaCuantitativa {
     @Column (name= "validado")
     private boolean validado;
 
-    @OneToMany(mappedBy = "competenciaCuantitativa", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
+    @OneToMany(mappedBy = "competenciaCuantitativa", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true, fetch = FetchType.LAZY)
     @Builder.Default
     private List<Comportamiento> comportamientos = new ArrayList<>();
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "evaluado_id")
     @ToString.Exclude
     private Evaluado evaluador;
@@ -62,5 +62,10 @@ public class CompetenciaCuantitativa {
         this.fecha = fecha;
         this.resultado = resultado;
         this.validado = validado;
+    }
+
+    public void addComportamiento(Comportamiento comportamiento) {
+        this.comportamientos.add(comportamiento);
+        comportamiento.setCompetenciaCuantitativa(this);
     }
 }

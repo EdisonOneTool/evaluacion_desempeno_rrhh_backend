@@ -25,7 +25,7 @@ public class Comportamiento {
     @Column(name = "calificacion")
     private double calificacion;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "competencia_cuantitativa_id")
     @ToString.Exclude
     private CompetenciaCuantitativa competenciaCuantitativa;
