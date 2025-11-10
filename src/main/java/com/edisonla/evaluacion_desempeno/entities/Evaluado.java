@@ -21,29 +21,57 @@ public class Evaluado {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name="dni")
+    private String dni;
+
+    @Column(name="cuil")
+    private String cuil;
+
     @Column(name = "nombre")
     private String nombre;
 
     @Column(name = "apellido")
     private String apellido;
 
-    @Column(name = "incorporacion")
-    private Date incorporacion;
-
     @Column(name = "legajo")
     private int legajo;
 
-    @Column(name = "resultado_final")
-    private double resultadoFinal;
+    @Column(name = "incorporacion")
+    private Date incorporacion;
 
-    @Column(name = "username")
-    private String username;
+    @Column(name = "seniority")
+    private String seniority;
+
+    @Column(name = "disponibilidad")
+    private String disponibilidad;
 
     @Column(name = "mail")
     private String mail;
 
-    @Column(name = "password")
-    private String password;
+    @Column(name = "celula")
+    private String celula;
+
+    @Column(name = "equipo_metodologico")
+    private String equipoMetodologico;
+
+    @Column(name = "nuevo_puesto")
+    private String nuevoPuesto;
+
+    @Column(name ="puesto")
+    private String puesto;
+
+    //clave foranea hacia user (rol evaluador)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "EVALUADOR_ID")
+    private Usuario evaluador;
+
+    //clave foranea hacia user (rol validador)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "VALIDADOR_ID")
+    private Usuario validador;
+
+    @Column(name = "resultado_final")
+    private double resultadoFinal;
 
     @Column(name = "es_admin")
     private boolean admin;
@@ -56,37 +84,24 @@ public class Evaluado {
     @Builder.Default
     private List<CompetenciaCualitativa> competenciasCualitativas = new ArrayList<>();
 
-    public Evaluado(String nombre, String apellido, Date incorporacion, int legajo, double resultadoFinal, String username, String mail, String password) {
-        this.nombre = nombre;
-        this.apellido = apellido;
-        this.incorporacion = incorporacion;
-        this.legajo = legajo;
-        this.resultadoFinal = resultadoFinal;
-        this.username = username;
-        this.admin = false;
-        this.mail = mail;
-    }
-
-    public Evaluado(Long id, String nombre, String apellido, Date incorporacion, int legajo, double v, String username, String mail, String password, boolean b) {
+    public Evaluado(Long id, String nombre, String apellido, Date incorporacion, int legajo, double v, String mail, boolean b) {
         this.id = id;
         this.nombre = nombre;
         this.apellido = apellido;
         this.incorporacion = incorporacion;
         this.legajo = legajo;
         this.resultadoFinal = v;
-        this.username = username;
-        this.password = password;
+
         this.admin = b;
         this.mail = mail;
     }
 
-    public Evaluado(String nombre, String apellido, Date incorporacion, int legajo, double v, String username, String mail) {
+    public Evaluado(String nombre, String apellido, Date incorporacion, int legajo, double v, String mail) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.incorporacion = incorporacion;
         this.legajo = legajo;
         this.resultadoFinal = v;
-        this.username = username;
         this.mail = mail;
     }
 

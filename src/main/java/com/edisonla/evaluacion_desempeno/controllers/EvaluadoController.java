@@ -9,9 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -69,6 +71,19 @@ public class EvaluadoController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("error", e.getMessage()));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", e.getMessage()));
+        }
+    }
+
+
+
+
+    @PostMapping("/cargarNomina")
+    public ResponseEntity<String> cargoNomina(@RequestParam("file") MultipartFile file){
+        try{
+            service.addNomina(file);
+            return ResponseEntity.ok("Se cargo correctamente");
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body("Error al cargar CSV");
         }
     }
 }
