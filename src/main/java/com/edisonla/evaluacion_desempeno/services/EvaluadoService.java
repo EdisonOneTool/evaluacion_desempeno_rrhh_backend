@@ -25,35 +25,37 @@ import java.util.List;
 public class EvaluadoService {
 
     private final EvaluadoRepository repository;
+    private final EvaluadoMapper evaluadoMapper;
+    private final EvaluadoRequestMapper evaluadoRequestMapper;
 
     public Iterable<EvaluadoDto> getAll() {
         List<Evaluado> e = repository.findAll();
         return e
                 .stream()
-                .map(EvaluadoMapper::toDto) //method reference reemplazo de (e -> mapper.toDto(e))
+                .map(evaluadoMapper::toDto) //method reference reemplazo de (e -> mapper.toDto(e))
                 .toList();
     }
 
     public EvaluadoDto get(Long id) {
         Evaluado e = repository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("No se encontro el elemento con id: " + id));
-        return EvaluadoMapper.toDto(e);
+        return evaluadoMapper.toDto(e);
     }
 
     @Transactional
     public EvaluadoDto create(EvaluadoRequest dto) {
-        Evaluado e = repository.save(EvaluadoRequestMapper.toEntity(dto));
-        return EvaluadoMapper.toDto(e);
+        Evaluado e = repository.save(evaluadoRequestMapper.toEntity(dto));
+        return evaluadoMapper.toDto(e);
     }
 
     @Transactional
     public EvaluadoRequest update(Long id, EvaluadoRequest dto) {
         Evaluado original = repository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("No se encontro el elemento con id: " + id));
-        Evaluado updated = EvaluadoRequestMapper.toEntity(dto);
+        Evaluado updated = evaluadoRequestMapper.toEntity(dto);
         updated.setId(original.getId());
         Evaluado res = repository.save(updated);
-        return EvaluadoRequestMapper.toDto(res);
+        return evaluadoRequestMapper.toDto(res);
     }
 
     @Transactional

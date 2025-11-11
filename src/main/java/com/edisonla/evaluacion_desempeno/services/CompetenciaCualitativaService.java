@@ -10,6 +10,7 @@ import com.edisonla.evaluacion_desempeno.repositories.CompetenciaCualitativaRepo
 import com.edisonla.evaluacion_desempeno.repositories.EvaluadoRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,11 +21,16 @@ public class CompetenciaCualitativaService {
     private final CompetenciaCualitativaRepository repository;
     private final EvaluadoRepository evaluadoRepository;
 
+    @Autowired
+    private final CompetenciaCualitativaMapper ccMapper;
+    @Autowired
+    private final CompetenciaCualitativaRequestMapper ccRequestMapper;
+
     public Iterable<CompetenciaCualitativaDto> getAll(Long evaluadoId) {
         return repository.findAll()
                 .stream()
                 .filter(cc -> cc.getEvaluador().getId().equals(evaluadoId)) // Reemplazar por filtrar desde repo
-                .map(CompetenciaCualitativaMapper::toDto) //method reference reemplazo de (evaluacionCualitativa -> evaluacionCualitativaMapper.toDto(evaluacionCualitativa))
+                .map(ccMapper::toDto) //method reference reemplazo de (evaluacionCualitativa -> evaluacionCualitativaMapper.toDto(evaluacionCualitativa))
                 .toList();
     }
 
@@ -43,10 +49,10 @@ public class CompetenciaCualitativaService {
         Evaluado evaluado = evaluadoRepository.findById(evaluadoId)
                 .orElseThrow(() -> new EntityNotFoundException("No se encontro el elemento con id: " + evaluadoId));
 
-        CompetenciaCualitativa entidad = CompetenciaCualitativaRequestMapper.toEntity(dto);
+        CompetenciaCualitativa entidad = ccRequestMapper.toEntity(dto);
         evaluado.addCompetenciaCualitativa(entidad); // Establece la relación bidireccional
         CompetenciaCualitativa res = repository.save(entidad);
-        return CompetenciaCualitativaMapper.toDto(res);
+        return ccMapper.toDto(res);
     }
 
     @Transactional
@@ -56,10 +62,10 @@ public class CompetenciaCualitativaService {
         if(!cc.getEvaluador().getId().equals(evaluadoId)) {
             throw new IllegalArgumentException("Competencia Cualitativa " + id + " no pertenece al Evaluado " + evaluadoId);
         } else {
-            CompetenciaCualitativa updated = CompetenciaCualitativaRequestMapper.toEntity(dto);
+            CompetenciaCualitativa updated = ccRequestMapper.toEntity(dto);
             updated.setId(cc.getId());
             CompetenciaCualitativa res = repository.save(updated);
-            return CompetenciaCualitativaRequestMapper.toDto(res);
+            return ccRequestMapper.toDto(res);
         }
     }
 

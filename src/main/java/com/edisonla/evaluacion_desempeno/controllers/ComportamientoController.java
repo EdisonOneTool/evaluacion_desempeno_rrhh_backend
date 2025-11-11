@@ -24,6 +24,8 @@ public class ComportamientoController {
     @Autowired
     private ComportamientoService service;
 
+    private final ComportamientoMapper comportamientoMapper;
+
     private static final String urlBase = "/api/competencias-cuantitativas/{ccId}/comportamientos";
 
     @GetMapping
@@ -36,7 +38,7 @@ public class ComportamientoController {
                                                  @PathVariable long id) {
         try {
             Comportamiento comportamiento = service.get(ccId, id);
-            return ResponseEntity.ok(ComportamientoMapper.toDto(comportamiento));
+            return ResponseEntity.ok(comportamientoMapper.toDto(comportamiento));
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("error", e.getMessage()));
         }
