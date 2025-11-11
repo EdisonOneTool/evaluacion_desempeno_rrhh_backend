@@ -1,9 +1,11 @@
 package com.edisonla.evaluacion_desempeno.repositories;
 
-import com.edisonla.evaluacion_desempeno.entities.Usuario;
+import com.edisonla.evaluacion_desempeno.entities.UserInfo;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface UsuarioRepository  extends JpaRepository<Usuario,Long> {
+import java.util.Optional;
 
-    Usuario findByUsername(String username);
+public interface UsuarioRepository  extends JpaRepository<UserInfo,Long> {
+
+    Optional<UserInfo> findByEmail(String email);
 }

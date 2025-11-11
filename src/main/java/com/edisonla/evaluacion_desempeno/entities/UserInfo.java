@@ -15,18 +15,20 @@ import java.util.List;
 @Builder
 @Entity
 @Table(name = "usuarios")
-public class Usuario {
+public class UserInfo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
-    @Column(name = "username")
-    private String username;
+    @Column(name = "email")
+    private String email;
 
     @Column(name = "password")
     private String password;
+
+    @Column(name = "roles")
+    private String roles;
 
     // Todos los evaluados donde este usuario es el evaluador
     @OneToMany(mappedBy = "evaluador", fetch = FetchType.LAZY)

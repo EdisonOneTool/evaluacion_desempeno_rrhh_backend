@@ -3,7 +3,6 @@ package com.edisonla.evaluacion_desempeno.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -63,12 +62,12 @@ public class Evaluado {
     //clave foranea hacia user (rol evaluador)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "EVALUADOR_ID")
-    private Usuario evaluador;
+    private UserInfo evaluador;
 
     //clave foranea hacia user (rol validador)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "VALIDADOR_ID")
-    private Usuario validador;
+    private UserInfo validador;
 
     @Column(name = "resultado_final")
     private double resultadoFinal;
