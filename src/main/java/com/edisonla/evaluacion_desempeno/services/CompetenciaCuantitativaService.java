@@ -21,12 +21,14 @@ public class CompetenciaCuantitativaService {
 
     private final CompetenciaCuantitativaRepository repository;
     private final EvaluadoRepository evaluadoRepository;
+    private final CompetenciaCuantitativaMapper competenciaCuantitativaMapper;
+    private final CompetenciaCuantitativaRequestMapper competenciaCuantitativaRequestMapper;
 
     public Iterable<CompetenciaCuantitativaDto> getAll(Long evaluadoId) {
         return repository.findAll()
                 .stream()
                 .filter(cc -> cc.getEvaluador().getId().equals(evaluadoId)) // Reemplazar por filtrar desde repo
-                .map(CompetenciaCuantitativaMapper::toDto) //method reference reemplazo de (evaluacionCuantitativa -> evaluacionCuantitativaMapper.toDto(evaluacionCuantitativa))
+                .map(competenciaCuantitativaMapper::toDto) //method reference reemplazo de (evaluacionCuantitativa -> evaluacionCuantitativaMapper.toDto(evaluacionCuantitativa))
                 .toList();
     }
 
@@ -45,10 +47,10 @@ public class CompetenciaCuantitativaService {
         Evaluado evaluado = evaluadoRepository.findById(evaluadoId)
                 .orElseThrow(() -> new EntityNotFoundException("Evaluado no encontrado: " + evaluadoId));
 
-        CompetenciaCuantitativa entidad = CompetenciaCuantitativaRequestMapper.toEntity(dto);
+        CompetenciaCuantitativa entidad = competenciaCuantitativaRequestMapper.toEntity(dto);
         evaluado.addCompetenciaCuantitativa(entidad); // Establece la relación bidireccional
         CompetenciaCuantitativa res = repository.save(entidad);
-        return CompetenciaCuantitativaMapper.toDto(res);
+        return competenciaCuantitativaMapper.toDto(res);
     }
 
     @Transactional
@@ -58,10 +60,10 @@ public class CompetenciaCuantitativaService {
         if(!cc.getEvaluador().getId().equals(evaluadoId)) {
             throw new IllegalArgumentException("Competencia Cuantitativa " + id + " no pertenece al Evaluado " + evaluadoId);
         } else {
-            CompetenciaCuantitativa updated = CompetenciaCuantitativaRequestMapper.toEntity(dto);
+            CompetenciaCuantitativa updated = competenciaCuantitativaRequestMapper.toEntity(dto);
             updated.setId(cc.getId());
             CompetenciaCuantitativa res = repository.save(updated);
-            return CompetenciaCuantitativaRequestMapper.toDto(res);
+            return competenciaCuantitativaRequestMapper.toDto(res);
         }
     }
 

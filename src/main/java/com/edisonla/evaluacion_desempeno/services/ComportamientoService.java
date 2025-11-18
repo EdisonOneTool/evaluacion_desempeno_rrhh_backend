@@ -20,12 +20,14 @@ public class ComportamientoService {
 
     private final CompetenciaCuantitativaRepository competenciaCuantitativaRepository;
     private final ComportamientoRepository repository;
+    private final ComportamientoMapper comportamientoMapper;
+    private final ComportamientoRequestMapper comportamientoRequestMapper;
 
     public Iterable<ComportamientoDto> getAll(Long ccId) {
         return repository.findAll()
                 .stream()
                 .filter(comp -> comp.getCompetenciaCuantitativa().getId().equals(ccId)) // Reemplazar por filtrar desde repo
-                .map(ComportamientoMapper::toDto)
+                .map(comportamientoMapper::toDto)
                 .toList();
     }
 
@@ -43,10 +45,10 @@ public class ComportamientoService {
     public ComportamientoDto create(Long ccId, ComportamientoRequest dto) {
         CompetenciaCuantitativa cc = competenciaCuantitativaRepository.findById(ccId)
                 .orElseThrow(() -> new EntityNotFoundException("Competencia Cuantitativa no encontrada: " + ccId));
-        Comportamiento comp = ComportamientoRequestMapper.toEntity(dto);
+        Comportamiento comp = comportamientoRequestMapper.toEntity(dto);
         cc.addComportamiento(comp); // Establece la relación bidireccional
         Comportamiento res = repository.save(comp);
-        return ComportamientoMapper.toDto(res);
+        return comportamientoMapper.toDto(res);
     }
 
     @Transactional
@@ -56,10 +58,10 @@ public class ComportamientoService {
         if (!original.getCompetenciaCuantitativa().getId().equals(ccId)) {
             throw new IllegalArgumentException("Comportamiento " + id + " no pertenece a la competencia cuantitativa " + ccId);
         } else {
-            Comportamiento updated = ComportamientoRequestMapper.toEntity(dto);
+            Comportamiento updated = comportamientoRequestMapper.toEntity(dto);
             updated.setId(original.getId());
             Comportamiento res = repository.save(updated);
-            return ComportamientoRequestMapper.toDto(res);
+            return comportamientoRequestMapper.toDto(res);
         }
     }
 
