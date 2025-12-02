@@ -40,6 +40,14 @@ public class CompetenciaCuantitativa {
     @Column(name = "idPregunta", nullable = false)
     private String idPregunta;
 
+
+    @Column(name = "creado", nullable = false)
+    private Date creado;
+
+    @Column(name = "ultimaModificacion",  nullable = false)
+    private Date ultimaModificacion;
+
+
     @OneToMany(mappedBy = "competenciaCuantitativa", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true, fetch = FetchType.LAZY)
     @Builder.Default
     private List<Comportamiento> comportamientos = new ArrayList<>();

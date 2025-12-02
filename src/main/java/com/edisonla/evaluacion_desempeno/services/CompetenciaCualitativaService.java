@@ -14,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
+
 @Service
 @AllArgsConstructor
 public class CompetenciaCualitativaService {
@@ -26,6 +28,7 @@ public class CompetenciaCualitativaService {
     @Autowired
     private final CompetenciaCualitativaRequestMapper ccRequestMapper;
 
+    @Transactional(readOnly = true)
     public Iterable<CompetenciaCualitativaDto> getAll(Long evaluacionId) {
         return repository.findAll()
                 .stream()
@@ -34,6 +37,7 @@ public class CompetenciaCualitativaService {
                 .toList();
     }
 
+    @Transactional(readOnly = true)
     public CompetenciaCualitativa get(Long evaluacionId, Long id) {
         CompetenciaCualitativa cc = repository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("No se encontro el elemento con id: " + id));
@@ -50,6 +54,8 @@ public class CompetenciaCualitativaService {
                 .orElseThrow(() -> new EntityNotFoundException("No se encontro el elemento con id: " + evaluacionId));
 
         CompetenciaCualitativa entidad = ccRequestMapper.toEntity(dto);
+        entidad.setCreado(new Date());
+        entidad.setUltimaModificacion(new Date());
         evaluacion.addCompetenciaCualitativa(entidad); // Establece la relación bidireccional
         CompetenciaCualitativa res = repository.save(entidad);
         return ccMapper.toDto(res);
@@ -64,6 +70,7 @@ public class CompetenciaCualitativaService {
         } else {
             CompetenciaCualitativa updated = ccRequestMapper.toEntity(dto);
             updated.setId(cc.getId());
+            updated.setUltimaModificacion(new Date());
             CompetenciaCualitativa res = repository.save(updated);
             return ccRequestMapper.toDto(res);
         }

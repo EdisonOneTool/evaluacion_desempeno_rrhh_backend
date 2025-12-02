@@ -13,6 +13,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
+
 @Service
 @AllArgsConstructor
 public class CompetenciaCuantitativaService {
@@ -30,6 +32,7 @@ public class CompetenciaCuantitativaService {
                 .toList();
     }
 
+    @Transactional(readOnly = true)
     public CompetenciaCuantitativa get(Long evaluacionId, Long id) {
         CompetenciaCuantitativa cc = repository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Competencia Cuantitativa no encontrada: " + id));
@@ -46,6 +49,8 @@ public class CompetenciaCuantitativaService {
                 .orElseThrow(() -> new EntityNotFoundException("Evaluacion no encontrado: " + evaluacionId));
 
         CompetenciaCuantitativa entidad = competenciaCuantitativaRequestMapper.toEntity(dto);
+        entidad.setCreado(new Date());
+        entidad.setUltimaModificacion(new Date());
         evaluacion.addCompetenciaCuantitativa(entidad); // Establece la relación bidireccional
         CompetenciaCuantitativa res = repository.save(entidad);
         return competenciaCuantitativaMapper.toDto(res);
@@ -60,6 +65,7 @@ public class CompetenciaCuantitativaService {
         } else {
             CompetenciaCuantitativa updated = competenciaCuantitativaRequestMapper.toEntity(dto);
             updated.setId(cc.getId());
+            updated.setUltimaModificacion(new Date());
             CompetenciaCuantitativa res = repository.save(updated);
             return competenciaCuantitativaRequestMapper.toDto(res);
         }

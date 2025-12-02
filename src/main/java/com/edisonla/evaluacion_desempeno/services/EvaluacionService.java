@@ -11,6 +11,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -21,6 +22,7 @@ public class EvaluacionService {
     private final EvaluacionMapper evaluacionMapper;
     private final EvaluacionRequestMapper evaluacionRequestMapper;
 
+    @Transactional(readOnly = true)
     public Iterable<EvaluacionDto> getAll() {
         List<Evaluacion> e = repository.findAll();
         return e
@@ -29,6 +31,7 @@ public class EvaluacionService {
                 .toList();
     }
 
+    @Transactional(readOnly = true)
     public EvaluacionDto get(Long id) {
         Evaluacion e = repository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("No se encontro el elemento con id: " + id));
@@ -37,8 +40,10 @@ public class EvaluacionService {
 
     @Transactional
     public EvaluacionDto create(EvaluacionRequest dto) {
-        Evaluacion e = repository.save(evaluacionRequestMapper.toEntity(dto));
-        return evaluacionMapper.toDto(e);
+        Evaluacion e = evaluacionRequestMapper.toEntity(dto);
+        e.setCreado(new Date());
+        e.setUltimaModificacion(new Date());
+        return evaluacionMapper.toDto(repository.save(e));
     }
 
     @Transactional
@@ -47,6 +52,7 @@ public class EvaluacionService {
                 .orElseThrow(() -> new EntityNotFoundException("No se encontro el elemento con id: " + id));
         Evaluacion updated = evaluacionRequestMapper.toEntity(dto);
         updated.setId(original.getId());
+        updated.setUltimaModificacion(new Date());
         Evaluacion res = repository.save(updated);
         return evaluacionRequestMapper.toDto(res);
     }

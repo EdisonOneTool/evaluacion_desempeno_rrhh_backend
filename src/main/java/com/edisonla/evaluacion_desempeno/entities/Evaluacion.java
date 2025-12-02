@@ -41,6 +41,13 @@ public class Evaluacion {
     @Column(name ="puesto", length = 24)
     private String puesto;
 
+    @Column(name = "creado", nullable = false)
+    private Date creado;
+
+    @Column(name = "ultimaModificacion",  nullable = false)
+    private Date ultimaModificacion;
+
+
     //clave foranea hacia user (rol evaluado)
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "evaluado_id")

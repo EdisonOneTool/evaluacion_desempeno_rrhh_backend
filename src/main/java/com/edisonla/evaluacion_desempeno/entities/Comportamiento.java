@@ -3,6 +3,8 @@ package com.edisonla.evaluacion_desempeno.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.Date;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -27,6 +29,13 @@ public class Comportamiento {
 
     @Column(name = "idPregunta", nullable = false)
     private String idPregunta;
+
+    @Column(name = "creado", nullable = false)
+    private Date creado;
+
+    @Column(name = "ultimaModificacion",  nullable = false)
+    private Date ultimaModificacion;
+
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "competencia_cuantitativa_id")

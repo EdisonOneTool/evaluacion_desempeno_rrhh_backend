@@ -12,6 +12,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
+
 @Service
 @AllArgsConstructor
 public class ComportamientoService {
@@ -21,6 +23,7 @@ public class ComportamientoService {
     private final ComportamientoMapper comportamientoMapper;
     private final ComportamientoRequestMapper comportamientoRequestMapper;
 
+    @Transactional(readOnly = true)
     public Iterable<ComportamientoDto> getAll(Long ccId) {
         return repository.findAll()
                 .stream()
@@ -29,6 +32,7 @@ public class ComportamientoService {
                 .toList();
     }
 
+    @Transactional(readOnly = true)
     public Comportamiento get(Long ccId, Long id) {
         Comportamiento comp = repository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Comportamiento no encontrado: " + id));
@@ -45,6 +49,8 @@ public class ComportamientoService {
                 .orElseThrow(() -> new EntityNotFoundException("Competencia Cuantitativa no encontrada: " + ccId));
         Comportamiento comp = comportamientoRequestMapper.toEntity(dto);
         cc.addComportamiento(comp); // Establece la relación bidireccional
+        comp.setCreado(new Date());
+        comp.setUltimaModificacion(new Date());
         Comportamiento res = repository.save(comp);
         return comportamientoMapper.toDto(res);
     }
@@ -58,6 +64,7 @@ public class ComportamientoService {
         } else {
             Comportamiento updated = comportamientoRequestMapper.toEntity(dto);
             updated.setId(original.getId());
+            updated.setUltimaModificacion(new Date());
             Comportamiento res = repository.save(updated);
             return comportamientoRequestMapper.toDto(res);
         }

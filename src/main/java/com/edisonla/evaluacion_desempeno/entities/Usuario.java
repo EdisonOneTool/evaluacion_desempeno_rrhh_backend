@@ -41,6 +41,11 @@ public class Usuario {
     @Column(name = "cuil")
     private String cuil;
 
+    @Column(name = "creado", nullable = false)
+    private Date creado;
+
+    @Column(name = "ultimaModificacion",  nullable = false)
+    private Date ultimaModificacion;
 
     // Todas las evaluaciones donde este usuario es el evaluador
     @OneToMany(mappedBy = "evaluador", fetch = FetchType.LAZY)
