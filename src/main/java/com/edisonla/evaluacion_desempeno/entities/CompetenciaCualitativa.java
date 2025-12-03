@@ -18,9 +18,6 @@ public class CompetenciaCualitativa {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "nombre", nullable = false)
-    private String nombre;
-
     @Column(name = "descripcion")
     private String descripcion;
 
@@ -30,8 +27,8 @@ public class CompetenciaCualitativa {
     @Column (name= "validado")
     private boolean validado;
 
-    @Column(name = "idPregunta", nullable = false)
-    private String idPregunta;
+    @Column(name = "pregunta", nullable = false)
+    private String pregunta;
 
     @Column(name = "creado", nullable = false)
     private Date creado;

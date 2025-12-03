@@ -18,9 +18,6 @@ public class Comportamiento {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "nombre", nullable = false)
-    private String nombre;
-
     @Column(name = "descripcion")
     private String descripcion;
 
@@ -28,7 +25,7 @@ public class Comportamiento {
     private double calificacion;
 
     @Column(name = "idPregunta", nullable = false)
-    private String idPregunta;
+    private String pregunta;
 
     @Column(name = "creado", nullable = false)
     private Date creado;

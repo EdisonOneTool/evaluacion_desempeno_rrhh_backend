@@ -3,6 +3,7 @@ package com.edisonla.evaluacion_desempeno.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Date;
@@ -33,13 +34,19 @@ public class Usuario {
     private String roles;
 
     @Column(name = "incorporacion")
-    private Date incorporacion;
+    private LocalDate incorporacion;
 
     @Column(name = "legajo")
     private int legajo;
 
     @Column(name = "cuil")
     private String cuil;
+
+    @Column(name = "nombre")
+    private String nombre;
+
+    @Column(name = "apellido")
+    private String apellido;
 
     @Column(name = "creado", nullable = false)
     private Date creado;

@@ -4,6 +4,7 @@ package com.edisonla.evaluacion_desempeno.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -28,18 +29,11 @@ public class CompetenciaCuantitativa {
     @Column(name = "descripcion")
     private String descripcion;
 
-    @Column(name = "fecha", nullable = false)
-    private Date fecha;
-
     @Column(name = "resultado")
     private double resultado;
 
     @Column (name= "validado")
     private boolean validado;
-
-    @Column(name = "idPregunta", nullable = false)
-    private String idPregunta;
-
 
     @Column(name = "creado", nullable = false)
     private Date creado;
