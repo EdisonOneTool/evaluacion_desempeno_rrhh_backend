@@ -23,6 +23,12 @@ public class Usuario {
     @Column(name = "username", unique = true, nullable = false)
     private String username;
 
+    @Column(name = "nombre")
+    private String nombre;
+
+    @Column (name = "apellido")
+    private String apellido;
+
     @Column(name = "email", unique = true, nullable = false)
     private String email;
 
@@ -35,12 +41,17 @@ public class Usuario {
     @Column(name = "incorporacion")
     private Date incorporacion;
 
-    @Column(name = "legajo")
+    @Column(name = "legajo", unique = true, nullable = false)
     private int legajo;
 
-    @Column(name = "cuil")
+    @Column(name = "cuil", unique = true, nullable = false)
     private String cuil;
 
+    @Column (name = "puesto")
+    private String puesto;
+
+    @Column (name = "celula")
+    private String celula;
 
     // Todas las evaluaciones donde este usuario es el evaluador
     @OneToMany(mappedBy = "evaluador", fetch = FetchType.LAZY)
@@ -51,6 +62,6 @@ public class Usuario {
     private List<Evaluacion> validaciones = new ArrayList<>();
 
     // Todas las evaluaciones donde este usuario es el evaluado
-    @OneToMany(mappedBy = "validador", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "evaluado", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Evaluacion> evaluacionesPropias = new ArrayList<>();
 }
