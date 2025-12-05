@@ -1,6 +1,8 @@
 package com.edisonla.evaluacion_desempeno.controllers;
 
 
+import com.edisonla.evaluacion_desempeno.dtos.NominaUsuarioDto;
+import com.edisonla.evaluacion_desempeno.dtos.ResultadoImportacionDto;
 import com.edisonla.evaluacion_desempeno.dtos.UsuarioDto;
 import com.edisonla.evaluacion_desempeno.services.UsuarioService;
 import jakarta.persistence.EntityNotFoundException;
@@ -10,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -63,5 +66,12 @@ public class UsuarioController {
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("error", e.getMessage()));
         }
+    }
+
+
+    @PostMapping("/nomina")
+    public ResponseEntity<ResultadoImportacionDto> importarNomina(@RequestBody List<NominaUsuarioDto> nomina){
+        ResultadoImportacionDto res = service.importarNomina(nomina);
+        return ResponseEntity.ok(res);
     }
 }

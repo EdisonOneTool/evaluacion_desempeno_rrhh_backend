@@ -47,6 +47,8 @@ public class Evaluacion {
 
     @Column(name = "ultimaModificacion",  nullable = false)
     private Date ultimaModificacion;
+    @Column (name = "celula")
+    private String celula;
 
 
     //clave foranea hacia user (rol evaluado)
