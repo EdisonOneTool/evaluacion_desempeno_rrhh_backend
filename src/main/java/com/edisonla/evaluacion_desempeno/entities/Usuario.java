@@ -47,12 +47,6 @@ public class Usuario {
     @Column(name = "cuil", unique = true, nullable = false)
     private String cuil;
 
-    @Column (name = "puesto")
-    private String puesto;
-
-    @Column (name = "celula")
-    private String celula;
-
     // Todas las evaluaciones donde este usuario es el evaluador
     @OneToMany(mappedBy = "evaluador", fetch = FetchType.LAZY)
     private List<Evaluacion> evaluacionesAjenas = new ArrayList<>();
