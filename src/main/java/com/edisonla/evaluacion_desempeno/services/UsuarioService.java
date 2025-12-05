@@ -78,8 +78,6 @@ public class UsuarioService {
                     existente.setApellido(dto.apellido());
                     existente.setEmail(dto.email());
                     existente.setIncorporacion(dto.fechaInco());
-                    existente.setPuesto(dto.puesto());
-                    existente.setCelula(dto.celula());
                     existente.setCuil(dto.cuil());
 
                     repository.save(existente);
@@ -93,8 +91,6 @@ public class UsuarioService {
                             .incorporacion(dto.fechaInco())
                             .legajo(dto.legajo())
                             .cuil(dto.cuil())
-                            .puesto(dto.puesto())
-                            .celula(dto.celula())
                             .nombre(dto.nombre())
                             .apellido(dto.apellido())
                             .build();

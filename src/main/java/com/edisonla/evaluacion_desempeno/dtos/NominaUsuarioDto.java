@@ -8,8 +8,6 @@ import java.util.Date;
             String nombre,
             String apellido,
             String email,
-            Date fechaInco,
-            String puesto,
-            String celula
+            Date fechaInco
     ) {}
 

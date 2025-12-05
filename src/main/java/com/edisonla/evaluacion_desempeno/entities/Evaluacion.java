@@ -44,7 +44,7 @@ public class Evaluacion {
     @Column (name = "celula")
     private String celula;
 
-    
+
     //clave foranea hacia user (rol evaluado)
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "evaluado_id")
