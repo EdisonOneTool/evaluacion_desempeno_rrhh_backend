@@ -48,12 +48,6 @@ public class Usuario {
     @Column(name = "cuil", unique = true, nullable = false)
     private String cuil;
 
-    @Column(name = "nombre")
-    private String nombre;
-
-    @Column(name = "apellido")
-    private String apellido;
-
     @Column(name = "creado", nullable = false)
     private Date creado;
 

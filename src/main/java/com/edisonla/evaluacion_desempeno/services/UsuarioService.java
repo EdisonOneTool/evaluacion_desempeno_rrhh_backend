@@ -72,7 +72,7 @@ public class UsuarioService {
         int actualizados = 0;
         int errores = 0;
         List<String> mensajeError = new ArrayList<>();
-
+        List<Usuario> usuariosCargados = new ArrayList<>();
         for (NominaUsuarioDto dto : nomina){
             try{
                 Optional<Usuario> existenteOpt = repository.findByLegajo(dto.legajo());
@@ -85,6 +85,7 @@ public class UsuarioService {
                     existente.setEmail(dto.email());
                     existente.setIncorporacion(dto.fechaInco());
                     existente.setCuil(dto.cuil());
+                    existente.setUltimaModificacion(new Date());
 
                     repository.save(existente);
                     actualizados++;
@@ -93,15 +94,17 @@ public class UsuarioService {
                             .username(dto.email()) // ej: email como username
                             .email(dto.email())
                             .password(dto.cuil()) // su cuil cono password
-                            .roles("ROLE_EVALUADO") // rol por defecto
                             .incorporacion(dto.fechaInco())
                             .legajo(dto.legajo())
                             .cuil(dto.cuil())
                             .nombre(dto.nombre())
                             .apellido(dto.apellido())
+                            .creado(new Date())
+                            .ultimaModificacion(new Date())
                             .build();
 
-                    repository.save(nuevo);
+                    usuariosCargados.add(repository.save(nuevo));
+
                     creados++;
                 }
 
@@ -112,6 +115,6 @@ public class UsuarioService {
         }
 
         return new ResultadoImportacionDto(
-                total,creados,actualizados,errores,mensajeError);
+                total,creados,actualizados,errores,mensajeError,usuariosCargados);
     }
 }

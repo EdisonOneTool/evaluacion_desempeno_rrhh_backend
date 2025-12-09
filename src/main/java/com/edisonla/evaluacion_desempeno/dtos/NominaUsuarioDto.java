@@ -1,6 +1,7 @@
 package com.edisonla.evaluacion_desempeno.dtos;
 
-import java.util.Date;
+import java.time.LocalDate;
+
 
     public record NominaUsuarioDto(
             int legajo,
@@ -8,6 +9,6 @@ import java.util.Date;
             String nombre,
             String apellido,
             String email,
-            Date fechaInco
+            LocalDate fechaInco
     ) {}
 
