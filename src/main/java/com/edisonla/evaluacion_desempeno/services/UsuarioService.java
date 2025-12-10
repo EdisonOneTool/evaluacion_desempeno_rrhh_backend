@@ -1,5 +1,6 @@
 package com.edisonla.evaluacion_desempeno.services;
 
+import com.edisonla.evaluacion_desempeno.dtos.ChangePasswordRequest;
 import com.edisonla.evaluacion_desempeno.dtos.NominaUsuarioDto;
 import com.edisonla.evaluacion_desempeno.dtos.ResultadoImportacionDto;
 import com.edisonla.evaluacion_desempeno.dtos.UsuarioDto;
@@ -9,6 +10,8 @@ import com.edisonla.evaluacion_desempeno.repositories.UsuarioRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.apache.poi.ss.usermodel.*;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.edisonla.evaluacion_desempeno.enums.Roles;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,10 +37,16 @@ public class UsuarioService {
     private final JwtService jwtService;
 
     @Transactional(readOnly = true)
-    public Iterable<UsuarioDto> getAll(String token) {
+    public boolean checkIsAdmin(String token) {
         Usuario me = repository.findByEmail(jwtService.extractEmail(token))
                 .orElseThrow(() -> new EntityNotFoundException("No se encontro el elemento con token: " + token));
-        if(me.getRoles() != null && me.getRoles().contains(Roles.ADMIN.toString())) {
+        return (me.getRoles() != null && me.getRoles().contains(Roles.ADMIN.toString()));
+    }
+
+
+    @Transactional(readOnly = true)
+    public Iterable<UsuarioDto> getAll(String token) {
+        if (this.checkIsAdmin(token)) {
             List<Usuario> usuarios = repository.findAll();
             return usuarios
                     .stream()
@@ -48,11 +57,38 @@ public class UsuarioService {
         }
     }
 
+
     @Transactional(readOnly = true)
     public UsuarioDto whoAmI(String token) {
         Usuario me = repository.findByEmail(jwtService.extractEmail(token))
                 .orElseThrow(() -> new EntityNotFoundException("No se encontro el elemento con token: " + token));
         return usuarioMapper.toDto(me);
+    }
+
+    @Transactional(readOnly = true)
+    public UsuarioDto get(String token, Long id) {
+        if (this.checkIsAdmin(token)) {
+            Usuario found = repository.findById(id)
+                    .orElseThrow(() -> new EntityNotFoundException("No se encontro el elemento con token: " + token));
+            return usuarioMapper.toDto(found);
+        } else {
+            throw new RuntimeException("No tiene permisos para realizar esta accion");
+        }
+    }
+
+    @Transactional
+    public UsuarioDto update(String token, Long id, UsuarioDto dto) {
+        if(checkIsAdmin(token)) {
+            Usuario found = repository.findById(id)
+                    .orElseThrow(() -> new EntityNotFoundException("No se encontro el elemento con token: " + token));
+            Usuario updated = usuarioMapper.toEntity(dto);
+            updated.setId(found.getId());
+            updated.setUltimaModificacion(new Date());
+            Usuario res = repository.save(updated);
+            return usuarioMapper.toDto(res);
+        } else {
+            throw new RuntimeException("No tiene permisos para realizar esta accion");
+        }
     }
 
     @Transactional
@@ -67,11 +103,38 @@ public class UsuarioService {
     }
 
     @Transactional
+    public void delete(String token, Long id) {
+        if(checkIsAdmin(token)) {
+            Usuario me = repository.findById(id)
+                    .orElseThrow(() -> new EntityNotFoundException("No se encontro el elemento con token: " + token));
+            repository.delete(me);
+        } else {
+            throw new RuntimeException("No tiene permisos para realizar esta accion");
+        }
+    }
+
+    @Transactional
     public void deleteMyself(String token) {
         Usuario me = repository.findByEmail(jwtService.extractEmail(token))
                 .orElseThrow(() -> new EntityNotFoundException("No se encontro el elemento con token: " + token));
         repository.delete(me);
     }
+
+    @Transactional
+    public void changePassword(String token, ChangePasswordRequest req) {
+        Usuario me = repository.findByEmail(jwtService.extractEmail(token))
+                .orElseThrow(() -> new EntityNotFoundException("No se encontro el elemento con token: " + token));
+        PasswordEncoder encoder = new BCryptPasswordEncoder();
+        if(!me.getPassword().equals(encoder.encode(req.repeatNewPassword()))) {
+            throw new RuntimeException("La contraseña antigua no coincide con la provista");
+        }
+        if(!req.newPassword().equals(req.repeatNewPassword())) {
+            throw new RuntimeException("La contraseñas no coinciden");
+        }
+        me.setPassword(encoder.encode(req.newPassword()));
+        repository.save(me);
+    }
+
 
     @Transactional
     public ResultadoImportacionDto importarNomina(List<NominaUsuarioDto> nomina){

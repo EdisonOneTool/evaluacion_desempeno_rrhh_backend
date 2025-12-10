@@ -51,7 +51,7 @@ public class UsuarioController {
     }
 
     @PutMapping
-    public ResponseEntity<Object> update(@RequestHeader(value = HttpHeaders.AUTHORIZATION) String token,
+    public ResponseEntity<Object> updateMyself(@RequestHeader(value = HttpHeaders.AUTHORIZATION) String token,
                              @RequestBody UsuarioDto usuarioDto) {
         try {
             UsuarioDto dto = service.updateMyself(token, usuarioDto);
@@ -62,7 +62,7 @@ public class UsuarioController {
     }
 
     @DeleteMapping
-    public ResponseEntity<Object> delete(@RequestHeader(value = HttpHeaders.AUTHORIZATION) String token) {
+    public ResponseEntity<Object> deleteMyself(@RequestHeader(value = HttpHeaders.AUTHORIZATION) String token) {
         try {
             service.deleteMyself(token);
             return null;
@@ -70,6 +70,9 @@ public class UsuarioController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("error", e.getMessage()));
         }
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Object> get()
 
 
     @PostMapping("/nomina")
