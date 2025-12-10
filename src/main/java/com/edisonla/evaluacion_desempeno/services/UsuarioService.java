@@ -8,10 +8,16 @@ import com.edisonla.evaluacion_desempeno.mappers.UsuarioMapper;
 import com.edisonla.evaluacion_desempeno.repositories.UsuarioRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
+import org.apache.poi.ss.usermodel.*;
 import org.springframework.stereotype.Service;
 import com.edisonla.evaluacion_desempeno.enums.Roles;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +27,8 @@ import java.util.Optional;
 @AllArgsConstructor
 public class UsuarioService {
 
+    private static final DateTimeFormatter DATE_FORMAT =
+            DateTimeFormatter.ofPattern("yyyy-MM-dd");
     private final UsuarioRepository repository;
     private final UsuarioMapper usuarioMapper;
     private final JwtService jwtService;
@@ -117,4 +125,80 @@ public class UsuarioService {
         return new ResultadoImportacionDto(
                 total,creados,actualizados,errores,mensajeError,usuariosCargados);
     }
+
+    public List<NominaUsuarioDto> leerNominaExcel(MultipartFile file) throws IOException {
+
+        List<NominaUsuarioDto> nomina = new ArrayList<>();
+
+        try(Workbook workbook = WorkbookFactory.create(file.getInputStream());){
+            Sheet sheet =  workbook.getSheetAt(0);
+            DataFormatter formatter = new DataFormatter();
+
+            for (int i = 1; i <= sheet.getLastRowNum(); i++) {
+                Row row = sheet.getRow(i);
+                if (row == null)
+                    continue;
+
+
+                String legajoStr = formatter.formatCellValue(row.getCell(0));
+                if (legajoStr == null || legajoStr.isBlank())
+                    continue;
+                int legajo = Integer.parseInt(legajoStr);
+
+
+                String cuil = formatter.formatCellValue(row.getCell(1));
+
+
+                String nombre = formatter.formatCellValue(row.getCell(2));
+
+
+                String apellido = formatter.formatCellValue(row.getCell(3));
+
+
+                String email = formatter.formatCellValue(row.getCell(4));
+
+
+                // fechaInco (LocalDate)
+                LocalDate fechaInco = null;
+                Cell fechaCell = row.getCell(5);
+                if (fechaCell != null) {
+                    if (fechaCell.getCellType() == CellType.NUMERIC && DateUtil.isCellDateFormatted(fechaCell)) {
+                        // fecha tipo fecha de Excel
+                        fechaInco = fechaCell.getDateCellValue()
+                                .toInstant()
+                                .atZone(ZoneId.systemDefault())
+                                .toLocalDate();
+                    } else {
+                        // fecha en texto, ej "2024-01-31"
+                        String fechaStr = formatter.formatCellValue(fechaCell);
+                        if (!fechaStr.isBlank()) {
+                            fechaInco = LocalDate.parse(fechaStr, DATE_FORMAT);
+                        }
+                    }
+                }
+
+                NominaUsuarioDto dto = new NominaUsuarioDto(
+                        legajo,
+                        cuil,
+                        nombre,
+                        apellido,
+                        email,
+                        fechaInco
+                );
+
+                nomina.add(dto);
+            }
+        }
+
+        return nomina;
+    }
+
+
+    @Transactional
+    public ResultadoImportacionDto importarNominaDesdeExcel(MultipartFile file) throws IOException {
+        List<NominaUsuarioDto> nomina = this.leerNominaExcel(file);
+        return importarNomina(nomina); // reutilizamos tu lógica existente
+    }
+
+
 }
