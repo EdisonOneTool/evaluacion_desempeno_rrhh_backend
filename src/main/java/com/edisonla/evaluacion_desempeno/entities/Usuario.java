@@ -1,5 +1,6 @@
 package com.edisonla.evaluacion_desempeno.entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -56,13 +57,16 @@ public class Usuario {
 
     // Todas las evaluaciones donde este usuario es el evaluador
     @OneToMany(mappedBy = "evaluador", fetch = FetchType.LAZY)
+    @JsonManagedReference
     private List<Evaluacion> evaluacionesAjenas = new ArrayList<>();
 
     // Todas las evaluaciones donde este usuario es el validador
     @OneToMany(mappedBy = "validador", fetch = FetchType.LAZY)
+    @JsonManagedReference
     private List<Evaluacion> validaciones = new ArrayList<>();
 
     // Todas las evaluaciones donde este usuario es el evaluado
     @OneToMany(mappedBy = "evaluado", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<Evaluacion> evaluacionesPropias = new ArrayList<>();
 }
