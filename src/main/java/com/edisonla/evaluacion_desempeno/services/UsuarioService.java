@@ -193,7 +193,7 @@ public class UsuarioService {
 
         List<NominaUsuarioDto> nomina = new ArrayList<>();
 
-        try(Workbook workbook = WorkbookFactory.create(file.getInputStream());){
+        try(Workbook workbook = WorkbookFactory.create(file.getInputStream())){
             Sheet sheet =  workbook.getSheetAt(0);
             DataFormatter formatter = new DataFormatter();
 

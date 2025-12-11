@@ -1,5 +1,7 @@
 package com.edisonla.evaluacion_desempeno.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -54,25 +56,30 @@ public class Evaluacion {
     //clave foranea hacia user (rol evaluado)
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "evaluado_id")
+    @JsonBackReference
     private Usuario evaluado;
 
     //clave foranea hacia user (rol evaluador)
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "evaluador_id")
+    @JsonBackReference
     private Usuario evaluador;
 
     //clave foranea hacia user (rol validador)
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "validador_id")
+    @JsonBackReference
     private Usuario validador;
 
 
     @OneToMany(mappedBy = "evaluacion", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true, fetch = FetchType.LAZY)
     @Builder.Default
+    @JsonManagedReference
     private List<CompetenciaCuantitativa> competenciasCuantitativas = new ArrayList<>();
 
     @OneToMany(mappedBy = "evaluacion", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true, fetch = FetchType.LAZY)
     @Builder.Default
+    @JsonManagedReference
     private List<CompetenciaCualitativa> competenciasCualitativas = new ArrayList<>();
 
 

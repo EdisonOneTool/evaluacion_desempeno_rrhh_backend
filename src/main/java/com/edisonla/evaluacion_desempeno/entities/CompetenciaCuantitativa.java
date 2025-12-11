@@ -1,6 +1,8 @@
 package com.edisonla.evaluacion_desempeno.entities;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -44,11 +46,13 @@ public class CompetenciaCuantitativa {
 
     @OneToMany(mappedBy = "competenciaCuantitativa", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true, fetch = FetchType.LAZY)
     @Builder.Default
+    @JsonManagedReference
     private List<Comportamiento> comportamientos = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "evaluado_id")
     @ToString.Exclude
+    @JsonBackReference
     private Evaluacion evaluacion;
 
     public void addComportamiento(Comportamiento comportamiento) {

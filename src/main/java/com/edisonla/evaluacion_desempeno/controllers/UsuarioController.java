@@ -71,8 +71,8 @@ public class UsuarioController {
         }
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Object> get()
+    //@GetMapping("/{id}")
+    //public ResponseEntity<Object> get()
 
 
     @PostMapping("/nomina")

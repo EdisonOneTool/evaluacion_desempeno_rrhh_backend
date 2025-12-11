@@ -1,9 +1,13 @@
 package com.edisonla.evaluacion_desempeno.services;
 
 import com.edisonla.evaluacion_desempeno.dtos.EvaluacionDto;
+import com.edisonla.evaluacion_desempeno.dtos.EvaluacionesResponse;
 import com.edisonla.evaluacion_desempeno.entities.Evaluacion;
+import com.edisonla.evaluacion_desempeno.entities.Usuario;
+import com.edisonla.evaluacion_desempeno.enums.Roles;
 import com.edisonla.evaluacion_desempeno.mappers.EvaluacionMapper;
 import com.edisonla.evaluacion_desempeno.repositories.EvaluacionRepository;
+import com.edisonla.evaluacion_desempeno.repositories.UsuarioRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -11,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -18,6 +23,8 @@ public class EvaluacionService {
 
     private final EvaluacionRepository repository;
     private final EvaluacionMapper evaluacionMapper;
+    private final UsuarioRepository userRepository;
+    private final JwtService jwtService;
 
     @Transactional(readOnly = true)
     public Iterable<EvaluacionDto> getAll() {
@@ -60,6 +67,23 @@ public class EvaluacionService {
                 .orElseThrow(() -> new EntityNotFoundException("No se encontro el elemento con id: " + id));
         repository.delete(evaluacion);
     }
+
+
+    @Transactional(readOnly = true)
+    public EvaluacionesResponse getEvaluacionesByToken(String token) {
+        String email = jwtService.extractEmail(token);
+
+        Usuario usuario = userRepository.findByEmail(email)
+                .orElseThrow(() -> new EntityNotFoundException("Usuario no encontrado con email: " + email));
+
+        Long userId = usuario.getId();
+
+        List<Evaluacion> evaluaciones = repository.findAllByEvaluadorId(userId);   //MATI OBTIENE A BRUNO BRAIAN Y FACU
+        List<Evaluacion> validaciones = repository.findAllByValidadorId(userId);  //CHARLY OBTIENE A MATI
+
+        return new EvaluacionesResponse(evaluaciones, validaciones);
+    }
+
 }
 
 
