@@ -11,6 +11,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -45,7 +46,7 @@ public class UsuarioController {
             return ResponseEntity.ok(list);
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("error", e.getMessage()));
-        } catch (RuntimeException e) {
+        } catch (AuthorizationDeniedException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", e.getMessage()));
         }
     }
@@ -72,8 +73,44 @@ public class UsuarioController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Object> get()
+    public ResponseEntity<Object> get(@RequestHeader(value = HttpHeaders.AUTHORIZATION) String token,
+                                      @PathVariable Long id) {
+        try {
+            UsuarioDto dto = service.get(token, id);
+            return ResponseEntity.ok(dto);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("error", e.getMessage()));
+        } catch (AuthorizationDeniedException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", e.getMessage()));
+        }
+    }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<Object> update(@RequestHeader(value = HttpHeaders.AUTHORIZATION) String token,
+                                         @PathVariable Long id,
+                                         @RequestBody UsuarioDto usuarioDto) {
+        try {
+            UsuarioDto dto = service.update(token, id, usuarioDto);
+            return ResponseEntity.ok(dto);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("error", e.getMessage()));
+        } catch (AuthorizationDeniedException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", e.getMessage()));
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Object> delete(@RequestHeader(value = HttpHeaders.AUTHORIZATION) String token,
+                                         @PathVariable Long id) {
+        try {
+            service.delete(token, id);
+            return null;
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("error", e.getMessage()));
+        } catch (AuthorizationDeniedException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", e.getMessage()));
+        }
+    }
 
     @PostMapping("/nomina")
     public ResponseEntity<ResultadoImportacionDto> importarNomina(@RequestBody List<NominaUsuarioDto> nomina){

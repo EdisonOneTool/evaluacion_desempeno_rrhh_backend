@@ -10,6 +10,7 @@ import com.edisonla.evaluacion_desempeno.repositories.UsuarioRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.apache.poi.ss.usermodel.*;
+import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -53,7 +54,7 @@ public class UsuarioService {
                     .map(usuarioMapper::toDto) //method reference reemplazo de (e -> mapper.toDto(e))
                     .toList();
         } else {
-            throw new RuntimeException("No tiene permisos para realizar esta accion");
+            throw new AuthorizationDeniedException("No tiene permisos para realizar esta accion");
         }
     }
 
@@ -72,7 +73,7 @@ public class UsuarioService {
                     .orElseThrow(() -> new EntityNotFoundException("No se encontro el elemento con token: " + token));
             return usuarioMapper.toDto(found);
         } else {
-            throw new RuntimeException("No tiene permisos para realizar esta accion");
+            throw new AuthorizationDeniedException("No tiene permisos para realizar esta accion");
         }
     }
 
@@ -87,7 +88,7 @@ public class UsuarioService {
             Usuario res = repository.save(updated);
             return usuarioMapper.toDto(res);
         } else {
-            throw new RuntimeException("No tiene permisos para realizar esta accion");
+            throw new AuthorizationDeniedException("No tiene permisos para realizar esta accion");
         }
     }
 
@@ -109,7 +110,7 @@ public class UsuarioService {
                     .orElseThrow(() -> new EntityNotFoundException("No se encontro el elemento con token: " + token));
             repository.delete(me);
         } else {
-            throw new RuntimeException("No tiene permisos para realizar esta accion");
+            throw new AuthorizationDeniedException("No tiene permisos para realizar esta accion");
         }
     }
 
@@ -119,22 +120,6 @@ public class UsuarioService {
                 .orElseThrow(() -> new EntityNotFoundException("No se encontro el elemento con token: " + token));
         repository.delete(me);
     }
-
-    @Transactional
-    public void changePassword(String token, ChangePasswordRequest req) {
-        Usuario me = repository.findByEmail(jwtService.extractEmail(token))
-                .orElseThrow(() -> new EntityNotFoundException("No se encontro el elemento con token: " + token));
-        PasswordEncoder encoder = new BCryptPasswordEncoder();
-        if(!me.getPassword().equals(encoder.encode(req.repeatNewPassword()))) {
-            throw new RuntimeException("La contraseña antigua no coincide con la provista");
-        }
-        if(!req.newPassword().equals(req.repeatNewPassword())) {
-            throw new RuntimeException("La contraseñas no coinciden");
-        }
-        me.setPassword(encoder.encode(req.newPassword()));
-        repository.save(me);
-    }
-
 
     @Transactional
     public ResultadoImportacionDto importarNomina(List<NominaUsuarioDto> nomina){
