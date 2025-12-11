@@ -58,15 +58,39 @@ public class Usuario {
     // Todas las evaluaciones donde este usuario es el evaluador
     @OneToMany(mappedBy = "evaluador", fetch = FetchType.LAZY)
     @JsonManagedReference
+    @ToString.Exclude
+    @Builder.Default
+    @Setter(AccessLevel.NONE)
     private List<Evaluacion> evaluacionesAjenas = new ArrayList<>();
 
     // Todas las evaluaciones donde este usuario es el validador
     @OneToMany(mappedBy = "validador", fetch = FetchType.LAZY)
     @JsonManagedReference
+    @ToString.Exclude
+    @Builder.Default
+    @Setter(AccessLevel.NONE)
     private List<Evaluacion> validaciones = new ArrayList<>();
 
     // Todas las evaluaciones donde este usuario es el evaluado
     @OneToMany(mappedBy = "evaluado", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonManagedReference
+    @ToString.Exclude
+    @Builder.Default
+    @Setter(AccessLevel.NONE)
     private List<Evaluacion> evaluacionesPropias = new ArrayList<>();
+
+    /*public void addEvaluado(Evaluacion e) {
+        this.evaluacionesPropias.add(e);
+        e.setEvaluado(this);
+    }
+
+    public void addEvaluador(Evaluacion e) {
+        this.evaluacionesAjenas.add(e);
+        e.setEvaluador(this);
+    }
+
+    public void addValidador(Evaluacion e) {
+        this.validaciones.add(e);
+        e.setValidador(this);
+    }*/
 }

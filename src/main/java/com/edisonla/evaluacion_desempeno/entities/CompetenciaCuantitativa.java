@@ -43,20 +43,20 @@ public class CompetenciaCuantitativa {
     @Column(name = "ultimaModificacion",  nullable = false)
     private Date ultimaModificacion;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "evaluado_id")
+    @JsonBackReference
+    private Evaluacion evaluacion;
 
     @OneToMany(mappedBy = "competenciaCuantitativa", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true, fetch = FetchType.LAZY)
     @Builder.Default
     @JsonManagedReference
+    @ToString.Exclude
+    @Setter(AccessLevel.NONE)
     private List<Comportamiento> comportamientos = new ArrayList<>();
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "evaluado_id")
-    @ToString.Exclude
-    @JsonBackReference
-    private Evaluacion evaluacion;
-
-    public void addComportamiento(Comportamiento comportamiento) {
+    /*public void addComportamiento(Comportamiento comportamiento) {
         this.comportamientos.add(comportamiento);
         comportamiento.setCompetenciaCuantitativa(this);
-    }
+    }*/
 }

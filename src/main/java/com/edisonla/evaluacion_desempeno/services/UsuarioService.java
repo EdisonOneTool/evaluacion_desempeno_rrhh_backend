@@ -44,7 +44,6 @@ public class UsuarioService {
         return (me.getRoles() != null && me.getRoles().contains(Roles.ADMIN.toString()));
     }
 
-
     @Transactional(readOnly = true)
     public Iterable<UsuarioDto> getAll(String token) {
         if (this.checkIsAdmin(token)) {
