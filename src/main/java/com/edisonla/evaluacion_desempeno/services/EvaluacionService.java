@@ -72,6 +72,7 @@ public class EvaluacionService {
         }
         Evaluacion updated = evaluacionMapper.toEntity(dto);
         updated.setId(original.getId());
+        updated.setCreado(original.getCreado());
         updated.setUltimaModificacion(new Date());
         updated.setEvaluado(original.getEvaluado());
         updated.setEvaluador(original.getEvaluador());

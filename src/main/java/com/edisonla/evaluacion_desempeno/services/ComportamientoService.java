@@ -68,6 +68,7 @@ public class ComportamientoService {
         } else {
             Comportamiento updated = comportamientoMapper.toEntity(dto);
             updated.setId(original.getId());
+            updated.setCreado(original.getCreado());
             updated.setUltimaModificacion(new Date());
             updated.setCompetenciaCuantitativa(original.getCompetenciaCuantitativa());
             Comportamiento res = repository.save(updated);

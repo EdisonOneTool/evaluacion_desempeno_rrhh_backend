@@ -69,6 +69,7 @@ public class CompetenciaCuantitativaService {
         } else {
             CompetenciaCuantitativa updated = ccMapper.toEntity(dto);
             updated.setId(cc.getId());
+            updated.setCreado(cc.getCreado());
             updated.setUltimaModificacion(new Date());
             updated.setEvaluacion(cc.getEvaluacion());
             CompetenciaCuantitativa res = repository.save(updated);
