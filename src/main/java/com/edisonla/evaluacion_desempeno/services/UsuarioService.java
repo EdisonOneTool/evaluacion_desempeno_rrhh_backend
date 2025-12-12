@@ -78,6 +78,7 @@ public class UsuarioService {
                     .orElseThrow(() -> new EntityNotFoundException("No se encontro el elemento con token: " + token));
             Usuario updated = usuarioMapper.toEntity(dto);
             updated.setId(found.getId());
+            updated.setCreado(found.getCreado());
             updated.setUltimaModificacion(new Date());
             updated.setPassword(found.getPassword());
             Usuario res = repository.save(updated);
@@ -93,6 +94,7 @@ public class UsuarioService {
                 .orElseThrow(() -> new EntityNotFoundException("No se encontro el elemento con token: " + token));
         Usuario updated = usuarioMapper.toEntity(dto);
         updated.setId(me.getId());
+        updated.setCreado(me.getCreado());
         updated.setUltimaModificacion(new Date());
         updated.setPassword(me.getPassword());
         Usuario res = repository.save(updated);
