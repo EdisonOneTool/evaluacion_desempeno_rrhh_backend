@@ -79,6 +79,7 @@ public class UsuarioService {
             Usuario updated = usuarioMapper.toEntity(dto);
             updated.setId(found.getId());
             updated.setUltimaModificacion(new Date());
+            updated.setPassword(found.getPassword());
             Usuario res = repository.save(updated);
             return usuarioMapper.toDto(res);
         } else {
@@ -93,6 +94,7 @@ public class UsuarioService {
         Usuario updated = usuarioMapper.toEntity(dto);
         updated.setId(me.getId());
         updated.setUltimaModificacion(new Date());
+        updated.setPassword(me.getPassword());
         Usuario res = repository.save(updated);
         return usuarioMapper.toDto(res);
     }
