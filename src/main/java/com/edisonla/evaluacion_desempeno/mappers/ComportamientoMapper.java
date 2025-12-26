@@ -9,7 +9,8 @@ import org.mapstruct.Mapping;
 public interface ComportamientoMapper {
     @Mapping(target = "competenciaCuantitativa", ignore = true)
     Comportamiento toEntity(ComportamientoDto dto);
-    @Mapping(target = "competenciaCuantitativa", ignore = true)
+
+    @Mapping(target = "competenciaCuantitativa", source = "competenciaCuantitativa.id")
     ComportamientoDto toDto(Comportamiento entity);
 }
 

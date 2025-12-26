@@ -11,6 +11,7 @@ import org.mapstruct.Mapping;
 public interface CompetenciaCualitativaMapper {
     @Mapping(target = "evaluacion", ignore = true)
     CompetenciaCualitativa toEntity(CompetenciaCualitativaDto dto);
-    @Mapping(target = "evaluacion", ignore = true)
+
+    @Mapping(target = "evaluacion", source = "evaluacion.id")
     CompetenciaCualitativaDto toDto(CompetenciaCualitativa entity);
 }
