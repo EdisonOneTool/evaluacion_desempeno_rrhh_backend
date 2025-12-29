@@ -2,6 +2,8 @@ package com.edisonla.evaluacion_desempeno.services;
 
 import com.edisonla.evaluacion_desempeno.dtos.EvaluacionDto;
 import com.edisonla.evaluacion_desempeno.dtos.EvaluacionesResponse;
+import com.edisonla.evaluacion_desempeno.dtos.NominaEvaluacionDto;
+import com.edisonla.evaluacion_desempeno.dtos.ResultadoImportacionEvaluacionDto;
 import com.edisonla.evaluacion_desempeno.entities.Evaluacion;
 import com.edisonla.evaluacion_desempeno.entities.Usuario;
 import com.edisonla.evaluacion_desempeno.enums.EstadoEvaluacion;
@@ -10,12 +12,22 @@ import com.edisonla.evaluacion_desempeno.repositories.EvaluacionRepository;
 import com.edisonla.evaluacion_desempeno.repositories.UsuarioRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
+import org.apache.poi.ss.usermodel.*;
+import org.hibernate.type.descriptor.java.JdbcDateJavaType;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+
+import static org.hibernate.type.descriptor.java.JdbcDateJavaType.DATE_FORMAT;
 
 @Service
 @AllArgsConstructor
@@ -48,7 +60,7 @@ public class EvaluacionService {
         Optional<Usuario> evaluador = userRepository.findById(dto.evaluador());
         Optional<Usuario> validador = userRepository.findById(dto.validador());
 
-        if(evaluado.isEmpty() || evaluador.isEmpty() || validador.isEmpty()) {
+        if (evaluado.isEmpty() || evaluador.isEmpty() || validador.isEmpty()) {
             throw new IllegalArgumentException("Verificar que evaluado/evaluador/validador exista");
         }
         Evaluacion e = evaluacionMapper.toEntity(dto);
@@ -66,7 +78,7 @@ public class EvaluacionService {
     public EvaluacionDto update(Long id, EvaluacionDto dto) {
         Evaluacion original = repository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("No se encontro el elemento con id: " + id));
-        if(!(userRepository.existsById(dto.evaluado()) || userRepository.existsById(dto.evaluador()) ||
+        if (!(userRepository.existsById(dto.evaluado()) || userRepository.existsById(dto.evaluador()) ||
                 userRepository.existsById(dto.validador()))) {
             throw new IllegalArgumentException("Verificar que el evaluado/evaluador/validador exista");
         }
@@ -98,13 +110,168 @@ public class EvaluacionService {
 
         Long userId = usuario.getId();
 
-        List<Evaluacion> evaluaciones = repository.findAllByEvaluadorId(userId);   //MATI OBTIENE A BRUNO BRAIAN Y FACU
-        List<Evaluacion> validaciones = repository.findAllByValidadorId(userId);  //CHARLY OBTIENE A MATI
+        List<EvaluacionDto> evaluaciones = repository.findAllByEvaluadorId(userId)
+                .stream()
+                .map(evaluacionMapper::toDto)
+                .toList();
+
+        List<EvaluacionDto> validaciones = repository.findAllByValidadorId(userId)
+                .stream()
+                .map(evaluacionMapper::toDto)
+                .toList();
 
         return new EvaluacionesResponse(evaluaciones, validaciones);
     }
 
-}
 
+    /**
+     * Lee el Excel de evaluaciones y devuelve una lista de DTOs
+     * Columnas esperadas:
+     * 0-LegajoEvaluado | 1-LegajoEvaluador | 2-LegajoValidador | 3-Nombre | 4-Fecha | 5-Puesto | 6-Celula | 7-Disponibilidad
+     */
+    public List<NominaEvaluacionDto> leerEvaluacionesExcel(MultipartFile file) throws IOException {
+        List<NominaEvaluacionDto> evaluaciones = new ArrayList<>();
+
+        try (Workbook workbook = WorkbookFactory.create(file.getInputStream())) {
+            Sheet sheet = workbook.getSheetAt(0);
+            DataFormatter formatter = new DataFormatter();
+
+            for (int i = 1; i <= sheet.getLastRowNum(); i++) {
+                Row row = sheet.getRow(i);
+                if (row == null) continue;
+
+
+                String legajoEvaluadoStr = formatter.formatCellValue(row.getCell(0));
+                if (legajoEvaluadoStr == null || legajoEvaluadoStr.isBlank()) continue;
+                int legajoEvaluado = Integer.parseInt(legajoEvaluadoStr);
+
+
+                String legajoEvaluadorStr = formatter.formatCellValue(row.getCell(1));
+                if (legajoEvaluadorStr == null || legajoEvaluadorStr.isBlank()) continue;
+                int legajoEvaluador = Integer.parseInt(legajoEvaluadorStr);
+
+
+                String legajoValidadorStr = formatter.formatCellValue(row.getCell(2));
+                if (legajoValidadorStr == null || legajoValidadorStr.isBlank()) continue;
+                int legajoValidador = Integer.parseInt(legajoValidadorStr);
+
+
+                String nombre = formatter.formatCellValue(row.getCell(3));
+
+
+                LocalDate fecha = null;
+                Cell fechaCell = row.getCell(4);
+                if (fechaCell != null) {
+                    if (fechaCell.getCellType() == CellType.NUMERIC && DateUtil.isCellDateFormatted(fechaCell)) {
+                        fecha = fechaCell.getDateCellValue()
+                                .toInstant()
+                                .atZone(ZoneId.systemDefault())
+                                .toLocalDate();
+                    } else {
+                        String fechaStr = formatter.formatCellValue(fechaCell);
+                        if (!fechaStr.isBlank()) {
+                            fecha = LocalDate.parse(fechaStr, DateTimeFormatter.ofPattern(JdbcDateJavaType.DATE_FORMAT));
+                        }
+                    }
+                }
+
+                if (fecha == null) {
+                    fecha = LocalDate.now();
+                }
+
+
+                String puesto = formatter.formatCellValue(row.getCell(5));
+
+
+                String celula = formatter.formatCellValue(row.getCell(6));
+
+
+                String disponibilidad = formatter.formatCellValue(row.getCell(7));
+
+                NominaEvaluacionDto dto = new NominaEvaluacionDto(
+                        legajoEvaluado,
+                        legajoEvaluador,
+                        legajoValidador,
+                        nombre,
+                        fecha,
+                        puesto,
+                        celula,
+                        disponibilidad
+                );
+
+                evaluaciones.add(dto);
+            }
+        }
+
+        return evaluaciones;
+    }
+
+    /**
+     * Importa las evaluaciones a partir de una lista de DTOs
+     */
+    @Transactional
+    public ResultadoImportacionEvaluacionDto importarEvaluaciones(List<NominaEvaluacionDto> nominaEvaluaciones) {
+        int total = nominaEvaluaciones.size();
+        int creados = 0;
+        int errores = 0;
+        List<String> mensajesError = new ArrayList<>();
+        List<Evaluacion> evaluacionesCargadas = new ArrayList<>();
+
+        for (NominaEvaluacionDto dto : nominaEvaluaciones) {
+            try {
+                // Buscar usuarios por legajo
+                Usuario evaluado = userRepository.findByLegajo(dto.legajoEvaluado())
+                        .orElseThrow(() -> new EntityNotFoundException(
+                                "No se encontro evaluado con legajo: " + dto.legajoEvaluado()));
+
+                Usuario evaluador = userRepository.findByLegajo(dto.legajoEvaluador())
+                        .orElseThrow(() -> new EntityNotFoundException(
+                                "No se encontro evaluador con legajo: " + dto.legajoEvaluador()));
+
+                Usuario validador = userRepository.findByLegajo(dto.legajoValidador())
+                        .orElseThrow(() -> new EntityNotFoundException(
+                                "No se encontro validador con legajo: " + dto.legajoValidador()));
+
+                Evaluacion evaluacion = Evaluacion.builder()
+                        .nombre(dto.nombre() != null && !dto.nombre().isBlank()
+                                ? dto.nombre()
+                                : "Evaluacion " + evaluado.getNombre() + " " + evaluado.getApellido())
+                        .fecha(dto.fecha())
+                        .estado(EstadoEvaluacion.PENDIENTE)
+                        .evaluado(evaluado)
+                        .evaluador(evaluador)
+                        .validador(validador)
+                        .puesto(dto.puesto())
+                        .celula(dto.celula())
+                        .disponibilidad(dto.disponibilidad())
+                        .resultadoCalculado(0.0)
+                        .creado(new Date())
+                        .ultimaModificacion(new Date())
+                        .build();
+
+                Evaluacion saved = repository.save(evaluacion);
+                evaluacionesCargadas.add(saved);
+                creados++;
+
+            } catch (Exception e) {
+                errores++;
+                mensajesError.add("Fila con evaluado legajo " + dto.legajoEvaluado() + ": " + e.getMessage());
+            }
+        }
+
+        return new ResultadoImportacionEvaluacionDto(
+                total, creados, errores, mensajesError, evaluacionesCargadas
+        );
+    }
+
+    /**
+     * Método que combina lectura de Excel e importación
+     */
+    @Transactional
+    public ResultadoImportacionEvaluacionDto importarEvaluacionesDesdeExcel(MultipartFile file) throws IOException {
+        List<NominaEvaluacionDto> nominaEvaluaciones = leerEvaluacionesExcel(file);
+        return importarEvaluaciones(nominaEvaluaciones);
+    }
+}
 
 

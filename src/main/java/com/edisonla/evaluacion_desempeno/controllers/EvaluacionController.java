@@ -2,6 +2,7 @@ package com.edisonla.evaluacion_desempeno.controllers;
 
 import com.edisonla.evaluacion_desempeno.dtos.EvaluacionDto;
 import com.edisonla.evaluacion_desempeno.dtos.EvaluacionesResponse;
+import com.edisonla.evaluacion_desempeno.dtos.ResultadoImportacionEvaluacionDto;
 import com.edisonla.evaluacion_desempeno.services.EvaluacionService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
@@ -10,8 +11,10 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.io.IOException;
 import java.net.URI;
 import java.util.Map;
 
@@ -84,6 +87,20 @@ public class EvaluacionController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("error", e.getMessage()));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", e.getMessage()));
+        }
+    }
+
+    @PostMapping("/importar-excel")
+    public ResponseEntity<Object> importarDesdeExcel(@RequestParam("file") MultipartFile file) {
+        try {
+            ResultadoImportacionEvaluacionDto resultado = service.importarEvaluacionesDesdeExcel(file);
+            return ResponseEntity.ok(resultado);
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("error", "Error al leer el archivo: " + e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("error", e.getMessage()));
         }
     }
 
