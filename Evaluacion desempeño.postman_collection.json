@@ -1,0 +1,1081 @@
+{
+	"info": {
+		"_postman_id": "32794754-c8c4-485b-874b-12e08dce4357",
+		"name": "Evaluacion desempeño",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "9496920"
+	},
+	"item": [
+		{
+			"name": "Autenticacion",
+			"item": [
+				{
+					"name": "Registrar usuario",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Save login tokens\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.collectionVariables.set(\"accessToken\", jsonData.access_token);\r",
+									"    pm.collectionVariables.set(\"refreshToken\", jsonData.refresh_token);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"cosmefulanito@mail.com\",\r\n    \"password\": \"1234\",\r\n    \"legajo\": 1234,\r\n    \"cuil\": \"23-12341234-2\",\r\n    \"incorporacion\": \"2024-04-30\",\r\n    \"nombre\": \"Cosme\",\r\n    \"apellido\": \"Fulanito\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/register",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "iniciar sesion",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Save login tokens\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.collectionVariables.set(\"accessToken\", jsonData.access_token);\r",
+									"    pm.collectionVariables.set(\"refreshToken\", jsonData.refresh_token);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"cosmefulanito@mail.com\",\r\n    \"password\": \"1234\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Refrescar access token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Save login tokens\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.collectionVariables.set(\"accessToken\", jsonData.access_token);\r",
+									"    pm.collectionVariables.set(\"refreshToken\", jsonData.refresh_token);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Refresh-Token",
+								"value": "{{refreshToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/refresh",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"refresh"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Validar usuario",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/validate",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"validate"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "New Request",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"oldPassword\": \"1234\",\r\n    \"newPassword\": \"12345\",\r\n    \"repeatNewPassword\": \"12345\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/changePassword",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"changePassword"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Usuarios",
+			"item": [
+				{
+					"name": "Obtener usuario logueado",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/usuarios",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"usuarios"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Listar todos los usuarios (ADMIN)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/usuarios/list",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"usuarios",
+								"list"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Actualizar usuario logueado",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"cosme1\",\r\n    \"nombre\": \"Cosme\",\r\n    \"apellido\": \"Fulanito\",\r\n    \"email\": \"cosmefulanito@mail.com\",\r\n    \"incorporacion\": \"2024-04-30\",\r\n    \"legajo\": 1234,\r\n    \"cuil\": \"23-12341234-2\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/usuarios",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"usuarios"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Eliminar usuario logueado",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/usuarios",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"usuarios"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obtener un usuario (ADMIN)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/usuarios/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"usuarios",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Actualizar un usuario (ADMIN)",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"cosme1\",\r\n    \"nombre\": \"Cosme\",\r\n    \"apellido\": \"Fulanito\",\r\n    \"email\": \"cosmefulanito@mail.com\",\r\n    \"incorporacion\": \"2024-04-30\",\r\n    \"legajo\": 1234,\r\n    \"cuil\": \"23-12341234-2\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/usuarios/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"usuarios",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Eliminar un usuario (ADMIN)",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/usuarios/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"usuarios",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Importar nomina desde JSON (ADMIN)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n    {\r\n        \"legajo\": 1234,\r\n        \"cuil\": \"23-12341234-2\",\r\n        \"nombre\": \"Cosme\",\r\n        \"apellido\": \"Fulanito\",\r\n        \"email\": \"cosmefulanito@mail.com\",\r\n        \"fechaInco\": \"2024-04-30\"\r\n    },\r\n    {\r\n        \"legajo\": 4321,\r\n        \"cuil\": \"23-43214231-2\",\r\n        \"nombre\": \"John\",\r\n        \"apellido\": \"Doe\",\r\n        \"email\": \"eljuancitodoe@mail.com\",\r\n        \"fechaInco\": \"2021-12-15\"\r\n    }\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/usuarios/nomina",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"usuarios",
+								"nomina"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Importar nomina desde Excel (ADMIN)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": []
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/usuarios/nomina/excel",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"usuarios",
+								"nomina",
+								"excel"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Evaluaciones",
+			"item": [
+				{
+					"name": "Obtener una evaluacion",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/evaluaciones/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"evaluaciones",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obtener todas las evaluaciones (ADMIN)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/evaluaciones",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"evaluaciones"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obtener mis evaluaciones",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/evaluaciones/mis-evaluaciones",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"evaluaciones",
+								"mis-evaluaciones"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Crear una evaluacion",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nombre\": \"eval1\",\r\n    \"fecha\":  \"2024-04-30\",\r\n    \"resultadoEscrito\": \"\",\r\n    \"resultadoCalculado\": 0.0,\r\n    \"celula\": \"Tecnologia\",\r\n    \"disponibilidad\": \"full-time\",\r\n    \"puesto\": \"semiSenior\",\r\n    \"evaluado\": 1, // ID del usuario evaluado\r\n    \"evaluador\": 2, // ID del usuario evaluador\r\n    \"validador\": 3 // ID del usuario validador\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/evaluaciones",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"evaluaciones"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Actualizar una evaluacion",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nombre\": \"eval1\",\r\n    \"fecha\":  \"2024-04-30\",\r\n    \"resultadoEscrito\": \"\",\r\n    \"resultadoCalculado\": 0.0,\r\n    \"celula\": \"Tecnologia\",\r\n    \"disponibilidad\": \"full-time\",\r\n    \"puesto\": \"semiSenior\",\r\n    \"evaluado\": 1, // ID del usuario evaluado\r\n    \"evaluador\": 2, // ID del usuario evaluador\r\n    \"validador\": 3, // ID del usuario validador\r\n    \"estado\": \"COMPLETADO\" // Enum estado evaluacion: PENDIENTE, COMPLETADO, VALIDADO\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/evaluaciones/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"evaluaciones",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Eliminar una evaluacion",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/evaluaciones/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"evaluaciones",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Importar evaluaciones desde Excel",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": []
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/evaluaciones/importar-excel",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"evaluaciones",
+								"importar-excel"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Competencias Cuantitativas",
+			"item": [
+				{
+					"name": "Obtener todas las competencias cuantitativas",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/competencias-cuantitativas?evaluacion=1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"competencias-cuantitativas"
+							],
+							"query": [
+								{
+									"key": "evaluacion",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obtener una competencia cuantitativa",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/competencias-cuantitativas/1?evaluacion=1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"competencias-cuantitativas",
+								"1"
+							],
+							"query": [
+								{
+									"key": "evaluacion",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Crear una compentencia cuantitativa",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nombre\": \"unaCompCuant\",\r\n    \"descripcion\": \"qsy\",\r\n    \"fecha\": \"2024-04-30\",\r\n    \"resultado\": 0.0,\r\n    \"validado\": false,\r\n    \"evaluacion\": 1 // ID de evaluacion enlazada\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/competencias-cuantitativas?evaluacion=1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"competencias-cuantitativas"
+							],
+							"query": [
+								{
+									"key": "evaluacion",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Actualizar una competencia cuantitativa",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nombre\": \"unaCompCuant\",\r\n    \"descripcion\": \"qsy\",\r\n    \"fecha\": \"2024-04-30\",\r\n    \"resultado\": 0.0,\r\n    \"validado\": false,\r\n    \"evaluacion\": 1 // ID de evaluacion enlazada\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/competencias-cuantitativas/1?evaluacion=1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"competencias-cuantitativas",
+								"1"
+							],
+							"query": [
+								{
+									"key": "evaluacion",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Eliminar una competencia cuantitativa",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/competencias-cuantitativas/1?evaluacion=1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"competencias-cuantitativas",
+								"1"
+							],
+							"query": [
+								{
+									"key": "evaluacion",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Competencias Cualitativas",
+			"item": [
+				{
+					"name": "Obtener todas las competencias cualitativas",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/competencias-cualitativas?evaluacion=1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"competencias-cualitativas"
+							],
+							"query": [
+								{
+									"key": "evaluacion",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obtener una competencia cualitativa",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/competencias-cualitativas/1?evaluacion=1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"competencias-cualitativas",
+								"1"
+							],
+							"query": [
+								{
+									"key": "evaluacion",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Crear una compentencia cualitativa",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"descripcion\": \"qsy\",\r\n    \"pregunta\": \"como se llama el caballo blanco de San Martin?\",\r\n    \"devoluacion\": \"mmm no se, mal che\",\r\n    \"validado\": false,\r\n    \"evaluacion\": 1 // ID de evaluacion enlazada\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/competencias-cualitativas?evaluacion=1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"competencias-cualitativas"
+							],
+							"query": [
+								{
+									"key": "evaluacion",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Actualizar una competencia cualitativa",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"descripcion\": \"qsy\",\r\n    \"pregunta\": \"como se llama el caballo blanco de San Martin?\",\r\n    \"devoluacion\": \"mmm no se, mal che\",\r\n    \"validado\": false,\r\n    \"evaluacion\": 1 // ID de evaluacion enlazada\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/competencias-cualitativas/1?evaluacion=1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"competencias-cualitativas",
+								"1"
+							],
+							"query": [
+								{
+									"key": "evaluacion",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Eliminar una competencia cualitativa",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/competencias-cualitativas/1?evaluacion=1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"competencias-cualitativas",
+								"1"
+							],
+							"query": [
+								{
+									"key": "evaluacion",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Comportamientos",
+			"item": [
+				{
+					"name": "Obtener todos los comportamientos",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/comportamientos?competencia-cuantitativa=1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"comportamientos"
+							],
+							"query": [
+								{
+									"key": "competencia-cuantitativa",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obtener un comportamiento",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/comportamientos/1?competencia-cuantitativa=1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"comportamientos",
+								"1"
+							],
+							"query": [
+								{
+									"key": "competencia-cuantitativa",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Crear un comportamiento",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"descripcion\": \"qsy\",\r\n    \"calificacion\": 4.5,\r\n    \"pregunta\": \"mmm no se, mal che\",\r\n    \"competenciaCuantitativa\": 1 // ID de CC enlazada\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/comportamientos?competencia-cuantitativa=1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"comportamientos"
+							],
+							"query": [
+								{
+									"key": "competencia-cuantitativa",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Actualizar un comportamiento",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"descripcion\": \"qsy\",\r\n    \"calificacion\": 4.5,\r\n    \"pregunta\": \"mmm no se, mal che\",\r\n    \"competenciaCuantitativa\": 1 // ID de CC enlazada\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/comportamientos/1?competencia-cuantitativa=1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"comportamientos",
+								"1"
+							],
+							"query": [
+								{
+									"key": "competencia-cuantitativa",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Eliminar un comportamiento",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/comportamientos/1?competencia-cuantitativa=1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"comportamientos",
+								"1"
+							],
+							"query": [
+								{
+									"key": "competencia-cuantitativa",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Chequeo de salud",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/api/health",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"health"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{accessToken}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "accessToken",
+			"value": ""
+		},
+		{
+			"key": "refreshToken",
+			"value": ""
+		},
+		{
+			"key": "baseUrl",
+			"value": ""
+		}
+	]
+}
