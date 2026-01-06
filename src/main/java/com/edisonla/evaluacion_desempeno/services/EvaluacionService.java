@@ -124,11 +124,7 @@ public class EvaluacionService {
     }
 
 
-    /**
-     * Lee el Excel de evaluaciones y devuelve una lista de DTOs
-     * Columnas esperadas:
-     * 0-LegajoEvaluado | 1-LegajoEvaluador | 2-LegajoValidador | 3-Nombre | 4-Fecha | 5-Puesto | 6-Celula | 7-Disponibilidad
-     */
+  
     public List<NominaEvaluacionDto> leerEvaluacionesExcel(MultipartFile file) throws IOException {
         List<NominaEvaluacionDto> evaluaciones = new ArrayList<>();
 
@@ -140,21 +136,27 @@ public class EvaluacionService {
                 Row row = sheet.getRow(i);
                 if (row == null) continue;
 
+                int rowNum = i + 1; // para mensajes de error (Excel usa base 1)
 
                 String legajoEvaluadoStr = formatter.formatCellValue(row.getCell(0));
-                if (legajoEvaluadoStr == null || legajoEvaluadoStr.isBlank()) continue;
+                if (legajoEvaluadoStr == null || legajoEvaluadoStr.isBlank()) {
+                    throw new IllegalArgumentException("Fila " + rowNum + ": LegajoEvaluado es obligatorio");
+                }
                 int legajoEvaluado = Integer.parseInt(legajoEvaluadoStr);
 
 
                 String legajoEvaluadorStr = formatter.formatCellValue(row.getCell(1));
-                if (legajoEvaluadorStr == null || legajoEvaluadorStr.isBlank()) continue;
+                if (legajoEvaluadorStr == null || legajoEvaluadorStr.isBlank()) {
+                    throw new IllegalArgumentException("Fila " + rowNum + ": LegajoEvaluador es obligatorio");
+                }
                 int legajoEvaluador = Integer.parseInt(legajoEvaluadorStr);
 
 
                 String legajoValidadorStr = formatter.formatCellValue(row.getCell(2));
-                if (legajoValidadorStr == null || legajoValidadorStr.isBlank()) continue;
+                if (legajoValidadorStr == null || legajoValidadorStr.isBlank()) {
+                    throw new IllegalArgumentException("Fila " + rowNum + ": LegajoValidador es obligatorio");
+                }
                 int legajoValidador = Integer.parseInt(legajoValidadorStr);
-
 
                 String nombre = formatter.formatCellValue(row.getCell(3));
 
@@ -174,41 +176,25 @@ public class EvaluacionService {
                         }
                     }
                 }
-
                 if (fecha == null) {
-                    fecha = LocalDate.now();
+                    throw new IllegalArgumentException("Fila " + rowNum + ": Fecha es obligatoria");
                 }
 
-
                 String puesto = formatter.formatCellValue(row.getCell(5));
-
-
                 String celula = formatter.formatCellValue(row.getCell(6));
-
-
                 String disponibilidad = formatter.formatCellValue(row.getCell(7));
 
-                NominaEvaluacionDto dto = new NominaEvaluacionDto(
-                        legajoEvaluado,
-                        legajoEvaluador,
-                        legajoValidador,
-                        nombre,
-                        fecha,
-                        puesto,
-                        celula,
-                        disponibilidad
-                );
-
-                evaluaciones.add(dto);
+                evaluaciones.add(new NominaEvaluacionDto(
+                        legajoEvaluado, legajoEvaluador, legajoValidador,
+                        nombre, fecha, puesto, celula, disponibilidad
+                ));
             }
         }
 
         return evaluaciones;
     }
 
-    /**
-     * Importa las evaluaciones a partir de una lista de DTOs
-     */
+
     @Transactional
     public ResultadoImportacionEvaluacionDto importarEvaluaciones(List<NominaEvaluacionDto> nominaEvaluaciones) {
         int total = nominaEvaluaciones.size();
@@ -264,9 +250,6 @@ public class EvaluacionService {
         );
     }
 
-    /**
-     * Método que combina lectura de Excel e importación
-     */
     @Transactional
     public ResultadoImportacionEvaluacionDto importarEvaluacionesDesdeExcel(MultipartFile file) throws IOException {
         List<NominaEvaluacionDto> nominaEvaluaciones = leerEvaluacionesExcel(file);
